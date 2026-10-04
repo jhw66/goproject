@@ -1,0 +1,17 @@
+syntax = "proto3";
+
+package video;
+
+option go_package = "./video";
+
+message IdRequest {
+  string id = 1;
+}
+
+message TitleResponse {
+  string title = 1;
+}
+
+service Video {
+  rpc GetTitle(IdRequest) returns (TitleResponse);
+}

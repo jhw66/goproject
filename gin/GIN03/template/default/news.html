@@ -1,0 +1,54 @@
+{{define "news.html"}}
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>新闻</title>
+    <!-- **静态资源（Static Files）**指的是：
+服务器不需要任何业务逻辑处理，直接原样返回给客户端的文件 -->
+    <link rel="stylesheet" href="/static/CSS/base.css">
+</head>
+<body>
+    <!-- 模板嵌套使用： -->
+    {{template "public/page_header.html" .}}
+<!-- 如果不加.，虽然模板可以引入，但是模板内是无法获取到数据的 -->
+
+    <h1>这是新闻页面</h1>
+    <h2>{{.news}}</h2>
+
+
+    <img src="/static/images/myphoto.jpg" alt="">
+
+
+    <!-- with 的核心作用（一句话）：如果表达式非空，就把 . 切换为该表达式的值；否则走 else。
+       语义上相当于：
+        if x != nil {
+            dot = x
+        } else {
+           ...
+        } -->
+    <ul>
+        {{range $key, $value := .newsList}}
+        {{with $value}}
+        <li>{{$key}} - {{.Title}} - {{.News}}</li>
+        {{else}}
+        <li>{{$key}} - 该新闻为空</li>
+        {{end}}
+        {{end}}
+    </ul>
+
+    <ul>
+        {{with .newsList}}
+            {{range $key, $value := .}}
+                <li>{{$key}} - {{.Title}} - {{.News}}</li>
+            {{end}}
+        {{else}}
+            <li>没有新闻</li>
+        {{end}}
+    </ul>
+
+    {{template "public/page_footer.html" .}}
+</body>
+</html>
+{{end}}

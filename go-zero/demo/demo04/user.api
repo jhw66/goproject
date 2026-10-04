@@ -1,0 +1,21 @@
+syntax = "v1"
+
+type UserInfoRequest {
+	Id int64 `path:"id"`
+}
+
+type UserInfoResponse {
+	Id   int64  `json:"id"`
+	Name string `json:"name"`
+	Age  int32  `json:"age"`
+}
+
+@server (
+	// 通过 middileware 关键字声明中间件，多个中间件以英文逗号分割，如 UserAgentMiddleware,LogMiddleware
+	middleware: UserAgentMiddleware
+)
+service user {
+	@handler userinfo
+	get /user/info/:id (UserInfoRequest) returns (UserInfoResponse)
+}
+

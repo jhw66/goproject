@@ -1,0 +1,78 @@
+syntax = "v1"
+
+type RegisterReq {
+	Username string `json:"username"`
+	Password string `json:"password"`
+}
+
+type RegisterResp {
+	Id       int64  `json:"id"`
+	Username string `json:"username"`
+}
+
+type LoginReq {
+	Username string `json:"username"`
+	Password string `json:"password"`
+}
+
+type LoginResp {
+	Need2FA      bool   `json:"need2fa"`
+	ChallengeToken string `json:"challengeToken,omitempty"`
+	AccessToken  string `json:"accessToken,omitempty"`
+	AccessExpire int64  `json:"accessExpire,omitempty"`
+}
+
+type EmptyReq {}
+
+type TotpEnrollStartResp {
+	Issuer       string `json:"issuer"`
+	AccountName  string `json:"accountName"`
+	OTPAuthURL   string `json:"otpauthUrl"`
+	QRCodeDataURL string `json:"qrCodeDataUrl"`
+}
+
+type TotpCodeReq {
+	Code string `json:"code"`
+}
+
+type TotpToggleResp {
+	Enabled bool `json:"enabled"`
+}
+
+type TotpVerifyReq {
+	ChallengeToken string `json:"challengeToken"`
+	Code           string `json:"code"`
+}
+
+type TotpVerifyResp {
+	AccessToken  string `json:"accessToken"`
+	AccessExpire int64  `json:"accessExpire"`
+}
+
+type Disable2FAReq {
+	Password string `json:"password"`
+	Code     string `json:"code"`
+}
+
+@server (
+	prefix: /api/users
+)
+service mysql-api {
+	@handler register
+	post /register (RegisterReq) returns (RegisterResp)
+
+	@handler login
+	post /login (LoginReq) returns (LoginResp)
+
+	@handler totpEnrollStart
+	post /2fa/totp/enroll/start (EmptyReq) returns (TotpEnrollStartResp)
+
+	@handler totpEnrollConfirm
+	post /2fa/totp/enroll/confirm (TotpCodeReq) returns (TotpToggleResp)
+
+	@handler totpVerify
+	post /2fa/verify (TotpVerifyReq) returns (TotpVerifyResp)
+
+	@handler totpDisable
+	post /2fa/totp/disable (Disable2FAReq) returns (TotpToggleResp)
+}

@@ -1,0 +1,27 @@
+{{define "admin/index.html"}}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <t1>这是一个后台管理页面</t1>
+    <t2>{{.title}}</t2>
+
+    <br>
+    变量赋值示例 
+    {{$s :=.scores}}
+    <p>成绩：{{$s}}</p>
+    <!-- 条件判断示例 eq == ne != lt < le <= gt > ge >= -->
+    {{if ge $s 90}}
+    <p>成绩优秀</p>
+    {{else if ge $s 75}}
+    <p>成绩良好</p>
+    {{else}}
+    <p>成绩一般</p>
+    {{end}}
+</body>
+</html>
+{{end}}

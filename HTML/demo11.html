@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <div id="bix1">这是一个ID选择器标签</div>
+    <div class="box2">这是一个类选择器标签</div>
+    <div>普通div标签</div> 
+    <div>普通div标签</div>
+    <button>点击我试试</button>
+    <button>按钮2</button>
+    <script>
+        var element_id=document.getElementById('bix1');
+        console.log(element_id);
+        var element_class=document.getElementsByClassName('box2');
+        console.log(element_class);
+        console.log(element_class[0]);
+        var element_tag=document.getElementsByTagName('div');   
+        console.log(element_tag);
+        console.log(element_tag[2]);
+        
+
+        element_id.style.color='red';
+        element_class[0].style.fontSize='24px';
+        element_tag[2].innerText='<a href="#">这是一个链接</a>'
+        element_tag[3].innerHTML='<a href="#">这是一个链接</a>'
+
+        //DOM属性绑定事件
+        var button_element=document.getElementsByTagName('button');
+        button_element[0].onclick=function(){
+            alert("按钮被点击了，通过DOM属性绑定事件");
+        }
+        button_element[1].addEventListener('click',function(){
+            alert("按钮被点击了，通过addEventListener绑定事件");
+        });
+
+    </script>
+    
+</body>
+</html>

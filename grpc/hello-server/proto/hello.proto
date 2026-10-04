@@ -1,0 +1,23 @@
+syntax = "proto3";
+
+package hello;
+
+option go_package = ".;server";
+
+service HelloService {
+    rpc SayHello(HelloRequest) returns (HelloResponse);
+}
+
+//消息就是需要传输的数据，比如HelloRequest就是需要传输的数据，HelloResponse就是需要传输的数据
+message HelloRequest {
+    //1代表第一个字段，name代表字段名，string代表字段类型
+    string name = 1;
+    //2代表第二个字段，age代表字段名，int64代表字段类型
+    int64 age = 2;
+    //repeated代表重复，在go中就是切片
+    repeated string hobbies = 3;
+}
+
+message HelloResponse {
+    string returnmessage = 1;
+}

@@ -1,0 +1,16 @@
+Name: mysql-api
+Host: 0.0.0.0
+Port: 8888
+
+DataSource: "wjhaccount:Wujiahui789@tcp(127.0.0.1:3306)/mysqlWithtotp?parseTime=true&loc=UTC"
+
+Auth:
+  AccessSecret: "change-me-access-secret"
+  AccessExpire: 7200
+  ChallengeSecret: "change-me-pre-2fa-secret"
+  ChallengeExpire: 300
+
+Totp:
+  Issuer: "go-zero-2fa-demo"
+  SecretCipherKey: "change-me-32-byte-secret-for-demo"
+  QRCodeSize: 256

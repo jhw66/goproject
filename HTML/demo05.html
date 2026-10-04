@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CSS 选择器</title>
+    <style>
+        h2{
+            color: aqua;
+        }
+        .hightlight{
+            background-color: rgb(210, 207, 30);
+        }
+        #header{
+            font-size: 35px;
+        }
+        /*通用选择器*/
+        *{
+            font-family: "KaiTi";
+            font-weight: bolder;
+        }
+        .father > .son{
+            color: aquamarine;
+        } 
+        .father p{
+            color:aqua;
+        }
+        /*显示优先级:ID>类>标签名*/
+        .father .grandson{
+            color:blueviolet;
+            font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+        }
+        .father .son2>.grandson{
+            color:bisque;
+            font-family: "Arial Rounded MT Bold";
+        }
+        .father>.son2>.grandson{
+            color:blue;
+            font-family: "SimSun";
+        }
+        /*还可以看出来通过子元素推到的优先级比后代选择器高*/
+
+        h3+p{
+            background-color: red;
+            font-family:"Courier New";
+        }
+
+        #element:hover{
+            background-color: blueviolet;
+            font-family: fantasy;
+        }
+
+        .note::after {
+            /* 它不会出现在 HTML 结构里，但在浏览器渲染时会“凭空出现”在元素的结尾 */
+             content: " ⚠️"; /* 一定要写 content，否则不会显示！ */
+             color: red;
+        }
+.title::before {
+  content: "";
+  display: inline-block;
+  width: 50px;
+  height: 2px;
+  background: orange;
+  margin-left: 8px;
+  vertical-align: middle;
+}
+    </style>
+</head>
+<body>
+    <p>选择器分为:</p>
+    <ul style="color: burlywood;">
+        <li style="color: blueviolet;">元素选择器</li>
+        <li>类选择器</li>
+        <li>ID选择器</li>
+        <li>通用选择器</li>
+        <li>子元素选择器</li>
+        <li>后代选择器</li>
+        <li>并集选择器</li>
+        <li>伪类选择器</li>
+    </ul>
+    <h2>这是一个元素选择器示例</h2>
+    <h3 class="hightlight">这是一个类选择器示例</h3>
+    <h3>这是与上面的对比</h3>
+    <h4 id="header">这是一个ID选择器示例</h4>
+
+    <div class="father">
+        <p class="son">这是一个子元素选择器示例</p>
+        <p>这是一个子选择器与后代选择器的对比示例</p>
+        <div class="son2">
+            <p class="grandson">这是一个后代选择器示例</p>
+        </div>
+    </div>
+
+    <p>这是一个普通p标签</p>
+    <h3>这是一个相邻兄弟选择器示例</h3>
+    <p>这是另一个p标签
+
+    <h3 id="element">这是一个伪类选择器示例</h3>
+
+    <p class="note">这是一个伪元素示例</p>
+    <h2 class="title">这也是一个伪元素示例</h2>
+</body>
+</html>

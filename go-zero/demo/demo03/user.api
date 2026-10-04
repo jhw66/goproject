@@ -1,0 +1,43 @@
+syntax = "v1"
+
+type (
+	LoginReq {
+		Username string `json:"username"`
+		Password string `json:"password"`
+	}
+	LoginResp {
+		AccessToken        string `json:"token"`
+		RefreshToken string `json:"refresh_token"`
+	}
+	RefreshReq {
+		RefreshToken string `json:"refresh_token"`
+	}
+	ProfileReq  {
+		TargetID    int64  `json:"target_id"`
+	}
+	ProfileResp {
+		UserID    int64  `json:"user_id"`
+		Username  string `json:"username"`
+		Email     string `json:"email"`
+		CreatedAt string `json:"created_at"`
+	}
+)
+
+service user-api {
+	@handler Login
+	post /user/login (LoginReq) returns (LoginResp)
+
+	@handler RefreshToken
+	post /user/refresh (RefreshReq) returns (LoginResp)
+}
+
+@server (
+	jwt:     Auth
+	prefix:  /v1
+	timeout: 3s
+)
+service user-api {
+	@handler GetProfile
+	get /user/profile (ProfileReq) returns (ProfileResp)
+}
+

@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JS 导入方式</title>
+    <script>
+        console.log("Hello,我是内联脚本head部分");
+    </script>
+</head>  
+<body>
+    <script>
+        console.log("Hello,我是内联脚本body部分");
+        alert("欢迎来到JS世界！");
+    </script>
+
+    <script src="./myscriot.js"></script>
+
+    <script>
+        var x;
+        let y=5;
+        let empty_value;
+        const z = 10;
+        console.log
+        (
+            "x的值是:"+x+
+            ",\ny的值是:"+y+
+            ",\nz的值是:"+z+
+            ",\nempty_value的值是:"+empty_value
+        );
+
+        let time=12;
+        if(time<10){
+            alert("早上好");
+        }
+        else if(time<20){
+            alert("下午好");
+        }
+        else{
+            alert("晚上好");
+        }
+
+        for(let i=0;i<5;i++){
+            console.log("当前是第"+i+"次循环");
+        }
+
+        while(true){
+            console.log("y的值是:"+y);
+            y++;
+            if(y>7){
+                break;
+            }
+        }
+    </script>
+
+    <script>
+        function showMessage(){
+            alert("这是一个函数调用的示例！");
+        }
+        showMessage();
+    </script>
+</body>
+</html>

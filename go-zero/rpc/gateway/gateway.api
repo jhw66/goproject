@@ -1,0 +1,58 @@
+syntax = "v1"
+
+info (
+	title:   "RPC 聚合网关"
+	desc:    "HTTP 入口，转发到 greetrpc / userrpc / videorpc"
+	author:  "rpc"
+	version: "v1"
+)
+
+type (
+	HelloReq {
+		Name string `path:"name"`
+	}
+	HelloResp {
+		Message string `json:"message"`
+	}
+	UserNameReq {
+		Id string `path:"id"`
+	}
+	UserNameResp {
+		Name string `json:"name"`
+	}
+	VideoTitleReq {
+		Id string `path:"id"`
+	}
+	VideoTitleResp {
+		Title string `json:"title"`
+	}
+	SummaryReq {
+		Name string `form:"name,optional"`
+		Uid  string `form:"uid,optional"`
+		Vid  string `form:"vid,optional"`
+	}
+	SummaryResp {
+		Greeting string `json:"greeting"`
+		UserName string `json:"userName"`
+		Title    string `json:"title"`
+	}
+)
+
+@server (
+	prefix: /api
+	group:  demo
+)
+service gateway-api {
+	@handler Hello
+	get /hello/:name (HelloReq) returns (HelloResp)
+
+	@handler UserName
+	get /user/name/:id (UserNameReq) returns (UserNameResp)
+
+	@handler VideoTitle
+	get /video/title/:id (VideoTitleReq) returns (VideoTitleResp)
+
+	@handler Summary
+	get /summary (SummaryReq) returns (SummaryResp)
+}
+

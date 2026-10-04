@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CSS 导入方式</title>
+
+    <style>
+        p{
+            color:cadetblue;
+            font-size: 36px;
+            font-style: italic;
+        }
+    </style>
+
+    <link rel="stylesheet" href="./style.css">
+</head>
+<body>
+    CSS用于定义网页样式和布局的样式表语言
+    <p>这是一个应用了内部样式的css样式表的文本</p>
+    <h1 style="color: brown;">这是一个应用内联样式的css样式表文件</h1>
+    <h3>这是一个应用了外部样式的css样式表的文本</h3>
+
+    导入优先级：内联样式>内部样式>外部样式
+</body>
+</html>

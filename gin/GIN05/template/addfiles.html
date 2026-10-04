@@ -1,0 +1,28 @@
+{{define "addfiles.html"}}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <!-- action表示上传到哪个路由位置
+    <form action="/admin/user/doUpload" method="post" enctype="multipart/form-data">
+        用户名：<input type="text" name="username" placeholder="用户名"><br><br>
+        文件1：<input type="file" name="face1"><br><br>
+        文件2：<input type="file" name="face2"><br><br>
+        <button type="submit">提交</button>
+    </form> -->
+
+    <form action="/admin/user/doUpload" method="post" enctype="multipart/form-data">
+        用户名：<input type="text" name="username" placeholder="用户名"><br><br>
+        文件1： <input type="file" name="face[]"><br><br>
+        文件2： <input type="file" name="face[]"><br><br>
+        文件3： <input type="file" name="face[]"><br><br>
+        文件4： <input type="file" name="face[]"><br><br>
+        <input type="submit" value="提交">
+    </form>
+</body>
+</html>
+{{end}}

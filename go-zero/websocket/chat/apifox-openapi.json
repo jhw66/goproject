@@ -1,0 +1,586 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "Go-Zero WebSocket Chat API",
+    "version": "1.0.0",
+    "description": "Redis + MySQL WebSocket 聊天服务接口。导入 Apifox 后可测试房间创建、私密房间密码加入、房主授权、历史消息查询和 WebSocket 连接参数。"
+  },
+  "servers": [
+    {
+      "url": "http://localhost:3333",
+      "description": "本地 HTTP 服务"
+    }
+  ],
+  "tags": [
+    {
+      "name": "Rooms",
+      "description": "聊天室管理"
+    },
+    {
+      "name": "Messages",
+      "description": "聊天消息"
+    },
+    {
+      "name": "WebSocket",
+      "description": "WebSocket 连接说明"
+    }
+  ],
+  "paths": {
+    "/rooms": {
+      "get": {
+        "tags": [
+          "Rooms"
+        ],
+        "summary": "查询当前用户可见的房间",
+        "description": "返回 public 房间，以及当前用户已经加入的 private 房间。JWT 可通过 query token 或 Authorization Bearer 传入。",
+        "security": [
+          {
+            "bearerAuth": []
+          },
+          {
+            "queryToken": []
+          }
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/TokenQuery"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "房间列表",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "rooms": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/Room"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Rooms"
+        ],
+        "summary": "创建聊天室",
+        "description": "创建 public 或 private 房间。private 房间可传 password，服务端会保存 bcrypt hash；创建者会自动成为 owner。",
+        "security": [
+          {
+            "bearerAuth": []
+          },
+          {
+            "queryToken": []
+          }
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/TokenQuery"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateRoomRequest"
+              },
+              "examples": {
+                "publicRoom": {
+                  "summary": "创建公共房间",
+                  "value": {
+                    "id": "public-room",
+                    "name": "公共房间",
+                    "visibility": "public"
+                  }
+                },
+                "privateRoom": {
+                  "summary": "创建带密码私密房间",
+                  "value": {
+                    "id": "private-room",
+                    "name": "私密房间",
+                    "visibility": "private",
+                    "password": "123456"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "创建成功",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Room"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          }
+        }
+      }
+    },
+    "/rooms/{roomId}/join": {
+      "post": {
+        "tags": [
+          "Rooms"
+        ],
+        "summary": "通过密码加入私密房间",
+        "description": "当前 JWT 用户提交 private 房间密码，验证成功后写入 chat_room_members，之后可直接连接 WebSocket。",
+        "security": [
+          {
+            "bearerAuth": []
+          },
+          {
+            "queryToken": []
+          }
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/RoomIdPath"
+          },
+          {
+            "$ref": "#/components/parameters/TokenQuery"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/JoinRoomRequest"
+              },
+              "example": {
+                "password": "123456"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "加入成功",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StatusResponse"
+                },
+                "example": {
+                  "status": "joined"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          }
+        }
+      }
+    },
+    "/rooms/{roomId}/members": {
+      "post": {
+        "tags": [
+          "Rooms"
+        ],
+        "summary": "房主授权用户加入房间",
+        "description": "仅房间 created_by 或 owner 角色可调用。用于给 private 房间添加有权用户。",
+        "security": [
+          {
+            "bearerAuth": []
+          },
+          {
+            "queryToken": []
+          }
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/RoomIdPath"
+          },
+          {
+            "$ref": "#/components/parameters/TokenQuery"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AddMemberRequest"
+              },
+              "example": {
+                "userId": "u2",
+                "role": "member"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "授权成功",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StatusResponse"
+                },
+                "example": {
+                  "status": "ok"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          }
+        }
+      }
+    },
+    "/rooms/{roomId}/messages": {
+      "get": {
+        "tags": [
+          "Messages"
+        ],
+        "summary": "查询房间历史消息",
+        "description": "需要当前 JWT 用户有房间访问权限。limit 默认 50，最大 200。",
+        "security": [
+          {
+            "bearerAuth": []
+          },
+          {
+            "queryToken": []
+          }
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/RoomIdPath"
+          },
+          {
+            "$ref": "#/components/parameters/TokenQuery"
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "description": "返回消息条数，默认 50，最大 200",
+            "schema": {
+              "type": "integer",
+              "default": 50,
+              "maximum": 200,
+              "minimum": 1
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "历史消息",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "messages": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/ChatMessage"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          }
+        }
+      }
+    },
+    "/ws": {
+      "get": {
+        "tags": [
+          "WebSocket"
+        ],
+        "summary": "WebSocket 聊天连接",
+        "description": "这是 WebSocket 连接入口，实际连接地址为 ws://localhost:3333/ws?roomId={roomId}&token={jwt}。连接后发送 JSON：{\"type\":\"message\",\"content\":\"hello\"}。",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/RoomIdQuery"
+          },
+          {
+            "$ref": "#/components/parameters/TokenQueryRequired"
+          }
+        ],
+        "responses": {
+          "101": {
+            "description": "Switching Protocols"
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      },
+      "queryToken": {
+        "type": "apiKey",
+        "in": "query",
+        "name": "token"
+      }
+    },
+    "parameters": {
+      "RoomIdPath": {
+        "name": "roomId",
+        "in": "path",
+        "required": true,
+        "description": "房间 ID",
+        "schema": {
+          "type": "string"
+        },
+        "example": "private-room"
+      },
+      "RoomIdQuery": {
+        "name": "roomId",
+        "in": "query",
+        "required": true,
+        "description": "房间 ID",
+        "schema": {
+          "type": "string"
+        },
+        "example": "private-room"
+      },
+      "TokenQuery": {
+        "name": "token",
+        "in": "query",
+        "required": false,
+        "description": "JWT token。也可以使用 Authorization: Bearer <token>",
+        "schema": {
+          "type": "string"
+        }
+      },
+      "TokenQueryRequired": {
+        "name": "token",
+        "in": "query",
+        "required": true,
+        "description": "JWT token",
+        "schema": {
+          "type": "string"
+        }
+      }
+    },
+    "schemas": {
+      "Room": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "example": "private-room"
+          },
+          "name": {
+            "type": "string",
+            "example": "私密房间"
+          },
+          "visibility": {
+            "type": "string",
+            "enum": [
+              "public",
+              "private"
+            ],
+            "example": "private"
+          },
+          "createdBy": {
+            "type": "string",
+            "example": "u1"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "CreateRoomRequest": {
+        "type": "object",
+        "required": [
+          "name"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "可选；为空时服务端生成",
+            "example": "private-room"
+          },
+          "name": {
+            "type": "string",
+            "example": "私密房间"
+          },
+          "visibility": {
+            "type": "string",
+            "enum": [
+              "public",
+              "private"
+            ],
+            "default": "public",
+            "example": "private"
+          },
+          "password": {
+            "type": "string",
+            "description": "private 房间可选密码；服务端只保存 bcrypt hash",
+            "example": "123456"
+          }
+        }
+      },
+      "JoinRoomRequest": {
+        "type": "object",
+        "required": [
+          "password"
+        ],
+        "properties": {
+          "password": {
+            "type": "string",
+            "example": "123456"
+          }
+        }
+      },
+      "AddMemberRequest": {
+        "type": "object",
+        "required": [
+          "userId"
+        ],
+        "properties": {
+          "userId": {
+            "type": "string",
+            "example": "u2"
+          },
+          "role": {
+            "type": "string",
+            "default": "member",
+            "example": "member"
+          }
+        }
+      },
+      "ChatMessage": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int64",
+            "example": 1
+          },
+          "roomId": {
+            "type": "string",
+            "example": "private-room"
+          },
+          "userId": {
+            "type": "string",
+            "example": "u1"
+          },
+          "nickname": {
+            "type": "string",
+            "example": "Alice"
+          },
+          "content": {
+            "type": "string",
+            "example": "hello"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "StatusResponse": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string",
+            "example": "ok"
+          }
+        }
+      },
+      "ErrorResponse": {
+        "type": "object",
+        "properties": {
+          "error": {
+            "type": "string",
+            "example": "invalid token"
+          }
+        }
+      }
+    },
+    "responses": {
+      "BadRequest": {
+        "description": "请求参数错误",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/ErrorResponse"
+            }
+          }
+        }
+      },
+      "Unauthorized": {
+        "description": "JWT 无效或缺失",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/ErrorResponse"
+            }
+          }
+        }
+      },
+      "Forbidden": {
+        "description": "无权限",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/ErrorResponse"
+            }
+          }
+        }
+      }
+    }
+  }
+}

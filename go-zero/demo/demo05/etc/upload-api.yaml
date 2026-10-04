@@ -1,0 +1,11 @@
+Name: upload-api
+Host: 0.0.0.0
+Port: 8080
+
+Qiniu:
+  AccessKey: "d417Ok391Q5tpqIV8_ykD_Md8j-cs4F9TNwZCajM"
+  SecretKey: "KNZlr2-YqYV7Hnvmg5rDyl6IW6lq1NK33fv1IDWk"
+  Bucket: "wujiahui"
+  Domain: "http://td03q7rr4.hn-bkt.clouddn.com"
+  Region: "z2"
+  Private: true

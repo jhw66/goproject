@@ -1,0 +1,15 @@
+type (
+	VideoReq {
+		Id string `path:"id"`
+	}
+	VideoRes {
+		Id   string `json:"id"`
+		Name string `json:"name"`
+	}
+)
+
+service video {
+	@handler getVideo
+	get /api/videos/:id (VideoReq) returns (VideoRes)
+}
+

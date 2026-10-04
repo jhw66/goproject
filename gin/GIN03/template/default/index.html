@@ -1,0 +1,33 @@
+{{define "index.html"}}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    {{template "public/page_header.html" .}}
+
+    <t1>这是一个首页</t1>
+    <t2>{{.title}}</t2>
+
+    <br>
+
+    <!-- 预定义函数 -->
+    {{len .title}}
+
+    <br>
+
+    {{Len .title}}
+    {{UnixToTime .timestamp}}
+
+    <br>
+
+    {{Println .content}}
+    {{Println .mixcontent}}
+
+    {{template "public/page_footer.html" .}}
+</body>
+</html>
+{{end}}

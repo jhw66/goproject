@@ -1,0 +1,36 @@
+version: "3.8"
+
+services:
+  app:
+    image: jhw66/myvideo_lab4:1.0   # 👉 你的 DockerHub 镜像
+    ports:
+      - "8080:8080"
+    environment:
+      - MYSQL_HOST=mysql
+      - REDIS_HOST=redis
+    depends_on:
+      - mysql
+      - redis
+    networks:
+      - backend
+
+  redis:
+    image: redis:alpine
+    networks:
+      - backend
+
+  mysql:
+    image: mysql:8.0
+    environment:
+      MYSQL_ROOT_PASSWORD: 123456
+      MYSQL_DATABASE: myvideo_lab4
+    volumes:
+      - mysql_data:/var/lib/mysql
+    networks:
+      - backend
+
+networks:
+  backend:
+
+volumes:
+  mysql_data:

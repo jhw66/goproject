@@ -1,0 +1,23 @@
+{{define "admin/news.html"}}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <t1>这是后台新闻页面</t1>
+    <t2>{{.news}}</t2>
+    <ul>
+        {{range $key,$value:=.newsList}}
+        {{with $value}}
+        <li>{{$key}}---{{.Title}}---{{.News}}</li>
+        {{else}}
+        <li>没有新闻</li>
+        {{end}}
+        {{end}}
+    </ul>
+</body>
+</html>
+{{end}}

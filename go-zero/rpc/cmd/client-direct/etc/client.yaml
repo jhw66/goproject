@@ -1,0 +1,18 @@
+# 直连 Greeter + User + Video RPC（开发/本机调试）
+# 请先启动: go run ./greetrpc -f greetrpc/etc/greeter.yaml
+#          go run ./userrpc -f userrpc/etc/user.yaml
+#          go run ./videorpc -f videorpc/etc/video.yaml
+Greeter:
+  Endpoints:
+    - 127.0.0.1:8080
+  Timeout: 2000
+
+User:
+  Endpoints:
+    - 127.0.0.1:8081
+  Timeout: 2000
+
+Video:
+  Endpoints:
+    - 127.0.0.1:8082
+  Timeout: 2000

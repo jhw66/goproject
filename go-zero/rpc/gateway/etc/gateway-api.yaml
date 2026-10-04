@@ -1,0 +1,26 @@
+Name: gateway-api
+Host: 0.0.0.0
+Port: 8888
+
+# 下游 zRPC 均通过 etcd 服务发现（需先启动 etcd，且三服务已注册）
+# greetrpc: Key greeter.rpc  | userrpc: user.rpc  | videorpc: video.rpc
+Greeter:
+  Etcd:
+    Hosts:
+      - 127.0.0.1:2379
+    Key: greeter.rpc
+  Timeout: 2000
+
+User:
+  Etcd:
+    Hosts:
+      - 127.0.0.1:2379
+    Key: user.rpc
+  Timeout: 2000
+
+Video:
+  Etcd:
+    Hosts:
+      - 127.0.0.1:2379
+    Key: video.rpc
+  Timeout: 2000

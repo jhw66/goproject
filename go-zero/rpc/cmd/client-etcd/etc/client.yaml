@@ -1,0 +1,24 @@
+# 通过 etcd 发现 Greeter + User + Video（需 etcd，且服务已按 Key 注册）
+# greeter: greetrpc/etc/greeter.yaml Key greeter.rpc
+# user:    userrpc/etc/user.yaml Key user.rpc
+# video:   videorpc/etc/video.yaml Key video.rpc
+Greeter:
+  Etcd:
+    Hosts:
+      - 127.0.0.1:2379
+    Key: greeter.rpc
+  Timeout: 2000
+
+User:
+  Etcd:
+    Hosts:
+      - 127.0.0.1:2379
+    Key: user.rpc
+  Timeout: 2000
+
+Video:
+  Etcd:
+    Hosts:
+      - 127.0.0.1:2379
+    Key: video.rpc
+  Timeout: 2000

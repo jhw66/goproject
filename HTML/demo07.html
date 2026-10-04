@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>盒子模型相关属性</title>
+    <style>
+    table {
+      border-collapse: collapse; /*合并边框 */
+      width: 100%;               /* 表格占满宽度 */
+      text-align: center;        /* 内容居中 */
+    }
+    th, td {
+      border: 2px solid rgb(236, 34, 34);   /* 边框线 */
+      padding: 10px;             /* 内边距 */
+      width: 25%;                /* 四列等宽（100% ÷ 4）*/
+    }
+    th[colspan] {
+      background-color:bisque; /* 第一行bisque底 */
+      font-size: 18px;
+    }
+      .demo{
+            background-color: #00ffff;
+            display:inline-block;
+            border: 5px double yellow;
+            /*边框样式有:solid dashed dotted double*/
+            padding:20px;
+            margin:20px;
+        }
+        .border{
+            display:inline-block;
+            background-color: bisque;
+            border-style: solid dotted double dashed;
+            border-width: 13px 10px 5px 3px;
+            border-color: rgb(255, 0, 34);
+            padding: 20px;
+            /*按照顺时针方向设置*/
+        }
+    </style>
+</head>
+<body>
+     <table border="10">
+    <!-- 第一行：标题，跨四列 -->
+    <tr>
+      <th colspan="4">
+        盒子模型(Box Model)是指网页中每个元素都被表示为一个矩形盒子，
+        这些盒子由四个主要部分组成，这些属性都是复合属性，可以设置多个内容
+      </th>
+    </tr>
+
+    <!-- 第二行：四个小标题 -->
+    <tr>
+      <th>内容(content)</th>
+      <th>内边距(padding)</th>
+      <th>边框(border)</th>
+      <th>外边距(margin)</th>
+    </tr>
+
+    <!-- 第三行：对应的描述 -->
+    <tr>
+      <td>盒子包含的实际内容，比如文本、图片等。</td>
+      <td>围绕在内容的内部，是内容与边框之间的空间。</td>
+      <td>围绕在内边距的外部，是盒子的边界。</td>
+      <td>围绕在边框的外部，是盒子与其他元素之间的空间。</td>
+    </tr>
+  </table>
+    <br><br>
+    <div class="demo">最喜欢樱岛麻衣</div>
+    <div class="border">这是一个边框示例</div>
+</body>
+</html>

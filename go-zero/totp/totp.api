@@ -1,0 +1,40 @@
+syntax = "v1"
+
+type GenerateReq {
+	AccountName string `json:"accountName"`
+	Issuer      string `json:"issuer,optional"`
+}
+
+type GenerateResp {
+	Secret      string `json:"secret"`
+	Issuer      string `json:"issuer"`
+	AccountName string `json:"accountName"`
+	OTPAuthURL  string `json:"otpauthUrl"`
+}
+
+type VerifyReq {
+	Secret string `json:"secret"`
+	Code   string `json:"code"`
+}
+
+type VerifyResp {
+	Valid bool `json:"valid"`
+}
+
+type QRCodeReq {
+	OtpauthUrl string `json:"otpauthUrl"`
+}
+
+@server (
+	prefix: /api/totp
+)
+service totp-api {
+	@handler generate
+	post /generate (GenerateReq) returns (GenerateResp)
+
+	@handler verify
+	post /verify (VerifyReq) returns (VerifyResp)
+
+	@handler qrcodePost
+	post /qrcode (QRCodeReq)
+}

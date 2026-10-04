@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>本地展示 TOTP 二维码（qrCodeDataUrl）</title>
+    <style>
+      :root {
+        color-scheme: light dark;
+      }
+      body {
+        font-family: system-ui, sans-serif;
+        max-width: 640px;
+        margin: 1.5rem auto;
+        padding: 0 1rem;
+        line-height: 1.5;
+      }
+      textarea {
+        width: 100%;
+        min-height: 120px;
+        box-sizing: border-box;
+        font-family: ui-monospace, monospace;
+        font-size: 12px;
+      }
+      button {
+        margin-top: 0.75rem;
+        padding: 0.5rem 1rem;
+        cursor: pointer;
+      }
+      .hint {
+        font-size: 0.9rem;
+        opacity: 0.85;
+        margin: 0.5rem 0 1rem;
+      }
+      .qr-wrap {
+        margin-top: 1.25rem;
+        padding: 1rem;
+        border: 1px solid #ccc;
+        border-radius: 8px;
+        text-align: center;
+      }
+      .qr-wrap img {
+        max-width: 100%;
+        height: auto;
+        image-rendering: crisp-edges;
+      }
+      .err {
+        color: #c00;
+        margin-top: 0.5rem;
+        font-size: 0.9rem;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>本地展示 TOTP 绑定二维码</h1>
+    <p class="hint">
+      将接口 <code>POST /api/users/2fa/totp/enroll/start</code> 返回的
+      <code>qrCodeDataUrl</code> 整段（以 <code>data:image/png;base64,</code>
+      开头）粘贴到下方，点击「显示二维码」。<strong>不请求任何服务器</strong>，仅在浏览器内解码这段
+      Base64 PNG。
+    </p>
+    <label for="raw">qrCodeDataUrl</label>
+    <textarea id="raw" spellcheck="false" placeholder="data:image/png;base64,..."></textarea>
+    <button type="button" id="btn">显示二维码</button>
+    <button type="button" id="clear">清空</button>
+    <div id="msg" class="err" aria-live="polite"></div>
+    <div class="qr-wrap">
+      <img id="qr" alt="TOTP 二维码（粘贴 data URL 后显示）" hidden />
+      <p id="placeholder">尚未加载图片</p>
+    </div>
+    <script>
+      (function () {
+        var raw = document.getElementById("raw");
+        var btn = document.getElementById("btn");
+        var clear = document.getElementById("clear");
+        var img = document.getElementById("qr");
+        var msg = document.getElementById("msg");
+        var placeholder = document.getElementById("placeholder");
+
+        function normalize(s) {
+          s = String(s).trim();
+          // 去掉从 JSON 里复制时首尾多带的引号
+          if (
+            (s.charAt(0) === '"' && s.charAt(s.length - 1) === '"') ||
+            (s.charAt(0) === "'" && s.charAt(s.length - 1) === "'")
+          ) {
+            s = s.slice(1, -1);
+          }
+          return s.trim();
+        }
+
+        function show() {
+          msg.textContent = "";
+          var v = normalize(raw.value);
+          if (!v) {
+            msg.textContent = "请先粘贴 qrCodeDataUrl。";
+            return;
+          }
+          if (!v.startsWith("data:image/png;base64,")) {
+            msg.textContent =
+              "必须以 data:image/png;base64, 开头（请完整复制 qrCodeDataUrl 字段值）。";
+            return;
+          }
+          img.src = v;
+          img.hidden = false;
+          placeholder.hidden = true;
+        }
+
+        btn.addEventListener("click", show);
+
+        raw.addEventListener("keydown", function (e) {
+          if ((e.ctrlKey || e.metaKey) && e.key === "Enter") {
+            e.preventDefault();
+            show();
+          }
+        });
+
+        clear.addEventListener("click", function () {
+          raw.value = "";
+          img.removeAttribute("src");
+          img.hidden = true;
+          placeholder.hidden = false;
+          msg.textContent = "";
+        });
+      })();
+    </script>
+  </body>
+</html>

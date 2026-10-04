@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>网页布局方式</title>
+    <style>
+  table {
+    border-collapse: collapse; /*合并边框，整齐 */
+    width: 100%;
+    font-family: "微软雅黑", sans-serif;
+    background-color: #f9f9f9;
+  }
+
+  td {
+    border: 2px solid #ccc;
+    padding: 12px; /* 行间距 */
+    text-align: left;
+  }
+ /*选择器	                 作用	                               举例
+:first-child	       选中第一个子元素	                      li:first-child → 列表第1项
+:last-child	           选中最后一个子元素	                    p:last-child
+:nth-child(n)	       选中第n个子元素	                      tr:nth-child(3)
+:nth-child(odd/even)	奇偶行选择	                            表格斑马纹
+:nth-of-type(n)	       选中同类型元素的第n个（只看标签类型）	p:nth-of-type(2)
+:not(selector)	       排除某个选择器	                  tr:not(:first-child) → 除了第一行之外的所有行 */
+  tr:nth-child(odd) {
+    background-color: #ffffff; /* 奇数行白色 */
+  }
+
+  tr:nth-child(even) {
+    background-color: #f2f2f2; /* 偶数行浅灰 */
+  }
+
+  tr:hover:nth-child(odd) {
+    background-color: #d0ebff; /* 鼠标悬停高亮蓝色 */
+    transition: 0.3s;
+  }
+  tr:hover:nth-child(even) {
+    background-color: #d9ffd0; /* 鼠标悬停高亮绿色 */
+    transition: 0.3s;
+  }
+  caption {
+    font-size: 20px;
+    font-weight: bold;
+    margin: 10px;
+  }
+
+  .father {
+    width: 100%;
+    height: 200px;
+    background-color: #f0f0f0;
+    border: 2px solid yellow;
+    position: relative;
+    margin-top: 30px;
+    margin-bottom: 20px;
+    overflow: hidden;/* 清除浮动方法一 */
+  }
+  /* 清除浮动方法二
+  .father::after {
+  content: "";
+  display: block;
+  clear: both;
+} */
+  .left-son {
+    float: left;
+    width: 10%;
+    height: 300px;
+    background-color: lightblue;
+  }
+  .right-son {
+    float: right;
+    width: 10%;
+    height: 100%;
+    background-color: lightcoral;
+  }
+
+    .box1 {
+        width: 100%;
+        height: 300px;
+        background-color: #f0f0f0;
+        border: 2px solid green;
+    }
+    .box-normal {
+        width: 100px;
+        height: 100px;
+        background-color: rgb(118, 12, 12);
+    }
+    .box-relative {
+        width: 100px;
+        height: 100px;
+        background-color: lightgreen;
+        position: relative;
+        top: 20px;
+        left: 120px;
+    }
+    .box-absolute {
+        width: 100px;
+        height: 100px;
+        background-color: lightpink;
+        position: absolute;
+        right: 50px;
+    }
+    .box-fixed {
+        width: 100px;
+        height: 100px;
+        background-color: lightgray;
+        position: fixed;
+        bottom: 50px;
+        left: 20px;
+    }
+
+        header {
+            width: 100%;
+            height: 60px;
+            background-color: lightblue;
+            position: sticky;
+            top: 0px;       /* ✅ 粘在顶部 */
+            line-height: 60px;
+            text-align: center;
+            font-size: 24px;
+            font-weight: bold;
+        }
+        nav {
+           width: 100%;
+           text-align: center;
+           position: sticky;
+           bottom:0px;        /* ✅ 粘在底部 */
+           background: lightcoral;
+           padding: 10px;
+       }
+        .content {
+            height: 2000px;
+            font-size: 36px;
+            text-align: center;
+            margin-top: 20px;
+            font-family: Kaiti;
+        }
+        .content p1{
+            display:inline-block;
+            position:sticky;
+            height:40px;
+            top:60px;
+            background-color: yellow;
+            margin-bottom: 10px;
+            border-bottom: 10px solid red;
+        }
+         .spacer {
+        height: 1000px; /* ✅ 制造间隔空间 */
+        background-color: turquoise;
+    }
+        .content p2{
+            position:sticky;
+            display:inline-block;
+            height:40px;
+            top:100px;
+            background-color: orange;
+        } 
+</style>
+</head>
+<body>
+    <header>我是导航栏</header>
+    <div class="content">
+      <p1>往下滚看看效果！</p1><br>
+       <div class="spacer"></div> <!-- 1000px 空白，用来推下 p2 -->
+      <p2>往下滚看看效果！</p2><br>
+    </div>
+    <nav>我是底部导航栏</nav>   
+    <!-- 当你滚动页面时，header 一开始会随页面移动（表现为相对定位）。
+当它的顶部到达 top: 0（也就是视口顶端）时，它会“粘”在那里，变成固定定位的效果。
+等你往回滚，它又恢复成普通的相对定位。 -->
+
+<!-- 常见“粘不住”的陷阱
+父容器 overflow 不能是 hidden / scroll / auto，否则会让 sticky 失效。
+要写明至少一个偏移量（top、bottom、left、right），否则浏览器不知道“什么时候粘”。
+粘性定位只在它的滚动祖先区域内生效，不会跨出那个父容器 -->
+    <ul>
+    网页布局方式主要有以下几种:
+    <li>标准流(普通流，文档流)：网页按照元素的书写顺序一次排列</li>
+    <li>浮动</li>
+    <li>定位</li>
+    <li>Flexbox和Grid(自适应布局)</li>
+    </ul>
+    <br><br>
+
+    <table border="3" width="100%">
+    <caption>常见的网页布局方式</caption>
+  <tr><td>1. 标准流布局：这是HTML的默认布局方式，元素按照它们在HTML代码中的顺序从上到下排列。块级元素占据整行，而行内元素则在同一行内排列。</td></tr>
+  <tr><td>2. 浮动布局：使用CSS的float属性，可以让元素向左或向右浮动，从而实现文本环绕效果。浮动元素会脱离标准流，但仍然影响后续元素的排列。</td></tr>
+  <tr><td>3. 定位布局：通过CSS的position属性，可以将元素定位在页面的特定位置。定位方式包括静态定位(relative)、绝对定位(absolute)、固定定位(fixed)和粘性定位(sticky)。</td></tr>
+  <tr><td>4. Flexbox布局：使用CSS的Flexbox模块，可以创建灵活的布局，允许容器内的元素根据可用空间自动调整大小和位置，适用于一维布局。</td></tr>
+  <tr><td>5. Grid布局：CSS Grid布局模块提供了一个二维的布局系统，可以同时控制行和列，适用于复杂的网页布局设计。</td></tr>
+  <tr><td>6. 响应式布局：结合媒体查询和弹性布局技术，可以根据不同设备的屏幕尺寸调整布局，实现跨设备的良好用户体验。</td></tr>
+  <tr><td>7. 多栏布局：使用CSS的多栏布局属性，可以将文本内容分成多列，类似于报纸的排版效果。</td></tr>
+  <tr><td>8. 表格布局：虽然不推荐用于整体布局，但可以使用HTML表格元素来组织和排列数据。</td></tr>
+  <tr><td>9. 框架布局：使用HTML的iframe元素，可以在一个页面中嵌入另一个页面，实现独立的内容区域。</td></tr>
+  <tr><td>10. 混合布局：结合以上多种布局方式，根据具体需求灵活使用，以实现最佳的网页设计效果。</td></tr>
+</table>
+    <div class="father">
+        <!-- 浮动是相对于父元素浮动，只会在父元素内部移动 -->
+         <!-- 浮动四大特性
+        1. 脱离标准流
+        2. 向左或向右浮动，一行显示，顶部对齐
+        3. 影响后续元素排列
+        4. 具有行内块元素的特性 -->
+        <div class="left-son">左浮动</div>
+        <div class="right-son">右浮动</div>
+    </div>
+    <p>这是一段文本</p>
+
+    <ul>
+    常见的定位方式有:
+        <li>static(默认值)：元素按照正常的文档流排列。</li>
+        <li>relative(相对定位)：相对于其正常位置进行偏移。</li>
+        <li>absolute(绝对定位)：相对于最近的已定位祖先元素进行定位，如果没有已定位祖先，则相对于初始包含块（通常是viewport）定位。</li>
+        <li>fixed(固定定位)：相对于浏览器窗口进行定位，即使页面滚动也不会移动。</li>
+        <li>sticky(粘性定位)：在跨越特定阈值前表现为相对定位，之后表现为固定定位。</li>
+    </ul>
+    <div class="box1">
+        <div class="box-normal"></div>
+        <div class="box-relative"></div>
+        <div class="box-absolute"></div>
+        <div class="box-fixed"></div>
+        <div class="box-sticky"></div>
+    </div>
+</body>
+</html>

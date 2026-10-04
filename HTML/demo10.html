@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>事件处理</title>
+    <style>
+        table{
+            /*border-collapse: collapse; /*合并边框 */
+            width: 100%;               /* 表格占满宽度 */
+            text-align: center;        /* 内容居中 */
+            border:2px solid #ccc;
+        }
+        th,td{
+            width:50%;
+            border: 2px dashed #ccc;
+            padding: 10px;             /* 内边距 */
+        }
+    </style>
+</head>
+<body>
+    事件是用户与网页交互时发生的动作或发生的事情。<br>
+    常见的事件类型包括点击事件、鼠标悬停事件、键盘事件等。通过事件处理程序，我们可以定义在特定事件发生时执行的代码，从而实现动态交互效果。<br>
+    <table>
+        <tr><th>事件类型</th><th>描述</th></tr>
+        <tr><td>onclick</td><td>当用户点击元素时触发</td></tr>
+        <tr><td>onmouseover</td><td>当鼠标指针悬停在元素上时触发</td></tr>
+        <tr><td>onmouseout</td><td>当鼠标指针离开元素时触发</td></tr>
+        <tr><td>onchange</td><td>文本内容改变事件</td></tr>
+        <tr><td>onselect</td><td>文本框选中</td></tr>
+        <tr><td>onblur</td><td>移开光标</td></tr>
+        <tr><td>onfocus</td><td>光标聚集</td></tr>
+    </table>
+
+    <script>
+        function click_event(){
+            alert("按钮被点击了！");
+        }
+         function change_event(obj){
+            alert("你输入的内容是："+obj.value);
+        }
+        function focus_event(){
+            console.log("输入框获得焦点");
+        }
+        function blur_event(){
+            console.log("输入框失去焦点");
+        }
+    </script>
+    <button onclick="click_event()">这是一个点击事件</button>
+    <input type="text" placeholder="请输入内容" onchange="change_event(this)">
+    <input type="button" value="鼠标悬停试试" onmouseover="this.value='鼠标在上面'" onmouseout="this.value='鼠标离开了'">
+    <input type="text" value="试着选中我" onselect="alert('文本被选中')">
+    <input type="text" onfocus="focus_event()" onblur="blur_event()" placeholder="获得或失去焦点试试">
+</body>
+</html>
