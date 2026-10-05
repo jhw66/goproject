@@ -8,14 +8,14 @@
 <body>
     <form action="#">
         <label for="username">用户名:</label>
-        <input type="text" value="请输入用户名" id="username"><br><br>
+        <input type="text" name="text" value="请输入用户名" id="username" required><br><br>
         <label for="pwd">密码:</label>
-        <input type="password" placeholder="请输入密码" id="pwd"> <br><br>
+        <input type="password" name="password" placeholder="请输入密码" id="pwd" required> <br><br>
 
         <label>性别:</label>
-        <input type="radio" name="gender"> 男
-        <input type="radio" name="gender"> 女
-        <input type="radio" name="genders">其他
+        <input type="radio" name="gender" value="男"> 男
+        <input type="radio" name="gender" value="女"> 女
+        <input type="radio" name="genders" value="其他">其他
         <input type="submit">
 
         <hr>
@@ -27,6 +27,58 @@
         <input type="checkbox" name="hobby"> RAP
 
         <input type="submit" value="上传">
+    </form>
+
+    <form action="./payment_page" method="get">
+      <h2>报名参见见面会</h2>
+      <fieldset>
+        <legend>选择酒店房型：</legend>
+        <div>
+          <input type="radio" id="hotelChoice1" name="hotel" value="economy" checked />
+          <label for="hotelChoice1">经济型（+$0）</label>
+
+          <input type="radio" id="hotelChoice2" name="hotel" value="superior" />
+          <label for="hotelChoice2">高级型（+$50）</label>
+
+          <input type="radio" id="hotelChoice3" name="hotel" value="penthouse" disabled />
+          <label for="hotelChoice3">顶级套房（+$150）</label>
+        </div>
+      </fieldset>
+
+      <fieldset>
+        <legend>要参加的课程：</legend>
+        <div>
+          <input type="checkbox" id="yoga" name="yoga" />
+          <label for="yoga">瑜伽（+$10）</label>
+
+          <input type="checkbox" id="coffee" name="coffee" />
+          <label for="coffee">咖啡烘焙（+$20）</label>
+
+          <input type="checkbox" id="balloon" name="balloon" />
+          <label for="balloon">气球动物艺术（+$5）</label>
+        </div>
+      </fieldset>
+
+      <p>
+        <label for="transport">出行方式：</label>
+        <select name="transport" id="transport">
+          <option value="">--请选择一项--</option>
+          <option value="plane">乘坐飞机</option>
+          <option value="bike">骑自行车</option>
+          <option value="walk">徒步</option>
+          <option value="bus">乘坐公交</option>
+          <option value="train">搭乘火车</option>
+          <option value="jetPack">使用喷气背包</option>
+        </select>
+      </p>
+
+      <p>
+        <label for="comments">其他备注：</label>
+        <textarea id="comments" name="comments" rows="5" cols="33"></textarea>
+      </p>
+      <p>
+        <button>去结账</button>
+      </p>
     </form>
     
 </body>
