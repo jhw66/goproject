@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Replaced_element</title>
+    <style>
+
+.wrapper {
+  display: flex;
+  align-items: flex-start;
+}
+
+.wrapper > * {
+  margin: 20px;
+}
+
+.box {
+  border: 5px solid darkblue;
+  width: 400px;
+  height: 200px;
+}
+
+.wrapper  img {
+  height: 100%;
+  width: 100%;
+}
+
+.cover {
+  object-fit: cover;
+}
+
+.contain {
+  object-fit: contain;
+}
+
+.fill{
+    object-fit: fill;
+}
+
+.wrapper02 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 100px 100px;
+  gap: 20px;
+}
+
+.wrapper02 > div {
+  background-color: rebeccapurple;
+  border-radius: 0.5em;
+}
+
+.wrapper02 > img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+
+    </style>
+</head>
+<body>
+<div class="wrapper">
+  <div class="box">
+    <img
+      alt="balloons"
+      class="cover"
+      src="https://mdn.github.io/shared-assets/images/examples/balloons.jpg" />
+  </div>
+  <div class="box">
+    <img
+      alt="balloons"
+      class="contain"
+      src="https://mdn.github.io/shared-assets/images/examples/balloons.jpg" />
+  </div>
+  <div class="box">
+    <img
+      alt="balloons"
+      class="fill"
+      src="https://mdn.github.io/shared-assets/images/examples/balloons.jpg" />
+  </div>
+</div>
+
+<div class="wrapper02">
+  <img
+    alt="star"
+    src="https://mdn.github.io/shared-assets/images/examples/big-star.png" />
+  <div></div>
+  <div></div>
+  <div></div>
+</div>
+
+</body>
+</html>

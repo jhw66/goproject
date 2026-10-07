@@ -1,0 +1,165 @@
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      padding: 32px 20px;
+      background-color: #f1f5f9;
+      color: #1e293b;
+      font-family: system-ui, "Microsoft YaHei", sans-serif;
+      line-height: 1.7;
+    }
+
+    main {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    h1 {
+      margin: 0 0 12px;
+      font-size: clamp(24px, 4vw, 36px);
+    }
+
+    code {
+      font-family: Consolas, monospace;
+    }
+
+    .instructions {
+      padding: 16px 24px;
+      margin-bottom: 28px;
+      background-color: white;
+      border-left: 5px solid #2563eb;
+    }
+
+    .instructions ol {
+      padding-left: 24px;
+      margin: 8px 0;
+    }
+
+    .examples {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 24px;
+    }
+
+    .card {
+      min-width: 0;
+      padding: 18px;
+      border: 1px solid #cbd5e1;
+      background-color: white;
+    }
+
+    .card h2 {
+      margin: 0 0 6px;
+    }
+
+    .description {
+      min-height: 58px;
+      margin: 0 0 16px;
+    }
+
+    /* 三个盒子共用相同背景，只改变 background-attachment。 */
+    .demo {
+      height: 320px;
+      overflow-y: auto;
+      /* 滚到盒子底部后，继续滚动也不会带动外面的页面。 */
+      overscroll-behavior-y: contain;
+      padding: 16px;
+      border: 4px solid #334155;
+      background-color: #dbeafe;
+      /* 渐变也是背景图像；每种颜色占 80px，便于追踪它的位置。 */
+      background-image: repeating-linear-gradient(
+        to bottom,
+        #93c5fd 0 80px,
+        #fde68a 80px 160px,
+        #c4b5fd 160px 240px
+      );
+      background-position: left top;
+      background-repeat: repeat;
+    }
+
+    /* 相对于盒子固定：内部文字滚动时，背景不动。 */
+    .scroll {
+      background-attachment: scroll;
+    }
+
+    /* 相对于视口固定：页面滚动、内部文字滚动时，背景都不动。 */
+    .fixed {
+      background-attachment: fixed;
+    }
+
+    /* 相对于内容固定：内部文字滚动时，背景也一起移动。 */
+    .local {
+      background-attachment: local;
+    }
+
+    .demo:focus-visible {
+      outline: 3px solid #2563eb;
+      outline-offset: 3px;
+    }
+
+    /* 足够长的内容使盒子产生内部滚动条。文字右侧留出背景观察区。 */
+    .content p {
+      width: 78%;
+      min-height: 72px;
+      margin: 0 0 28px;
+      padding: 10px;
+      background-color: rgb(255 255 255 / 85%);
+      border: 1px solid #64748b;
+    }
+
+    .content p:last-child {
+      margin-bottom: 0;
+    }
+
+    .observation {
+      margin: 16px 0 0;
+      font-size: 14px;
+    }
+
+    .comparison {
+      margin-top: 28px;
+      padding: 20px;
+      background-color: white;
+      overflow-x: auto;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    caption {
+      text-align: left;
+      font-weight: bold;
+      margin-bottom: 12px;
+    }
+
+    th, td {
+      padding: 10px;
+      border: 1px solid #cbd5e1;
+      text-align: left;
+    }
+
+    th {
+      background-color: #eff6ff;
+    }
+
+    /* 留出页面滚动空间，便于观察 fixed 与另外两个值的区别。 */
+    .page-space {
+      min-height: 100vh;
+      margin-top: 28px;
+      padding: 24px;
+      border-top: 2px dashed #94a3b8;
+    }
+
+    @media (max-width: 800px) {
+      .examples {
+        grid-template-columns: 1fr;
+      }
+
+      .description {
+        min-height: 0;
+      }
+    }

@@ -4,39 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>盒子模型相关属性</title>
-    <style>
-    table {
-      border-collapse: collapse; /*合并边框 */
-      width: 100%;               /* 表格占满宽度 */
-      text-align: center;        /* 内容居中 */
-    }
-    th, td {
-      border: 2px solid rgb(236, 34, 34);   /* 边框线 */
-      padding: 10px;             /* 内边距 */
-      width: 25%;                /* 四列等宽（100% ÷ 4）*/
-    }
-    th[colspan] {
-      background-color:bisque; /* 第一行bisque底 */
-      font-size: 18px;
-    }
-      .demo{
-            background-color: #00ffff;
-            display:inline-block;
-            border: 5px double yellow;
-            /*边框样式有:solid dashed dotted double*/
-            padding:20px;
-            margin:20px;
-        }
-        .border{
-            display:inline-block;
-            background-color: bisque;
-            border-style: solid dotted double dashed;
-            border-width: 13px 10px 5px 3px;
-            border-color: rgb(255, 0, 34);
-            padding: 20px;
-            /*按照顺时针方向设置*/
-        }
-    </style>
+    <link href="style3.css" rel="stylesheet">
 </head>
 <body>
      <table border="10">
@@ -67,5 +35,63 @@
     <br><br>
     <div class="demo">最喜欢樱岛麻衣</div>
     <div class="border">这是一个边框示例</div>
+
+
+    <!-- <p>I am a paragraph. A short one.</p>
+<ul>
+  <li>Item One</li>
+  <li>Item Two</li>
+  <li>Item Three</li>
+</ul>
+<p>
+  I am another paragraph. Some of the <span class="block">words</span> have been
+  wrapped in a <span>span element</span>.
+</p>
+
+<p>
+  I am a paragraph. Some of the
+ 
+  <span>words</span> have been wrapped in a <span>span element</span>.
+
+</p> -->
+
+<ul>
+  <li>Item One</li>
+  <li>Item Two</li>
+  <li>Item Three</li>
+</ul>
+<p class="inline">I am a paragraph. A short one.</p>
+<p class="inline">I am another paragraph. Also a short one.</p>
+
+<div class="container">
+  <p class="one">I am paragraph one.</p>
+  <p class="two">I am paragraph two.</p>
+</div>
+
+<div class="container">
+  <div class="box">Change my borders.</div>
+</div>
+
+<div class="container">
+  <div class="box2">Change my padding.</div>
+</div>
+
+<p id="p1">
+  I am a paragraph and this is a <span>span</span> inside that paragraph. A span
+  is an inline element and so does not respect width and height.
+</p>
+
+<ul class="links-list">
+    <li><a href="">Link one</a></li>
+    <li><a href="">Link two</a></li>
+    <li><a href="">Link three</a></li>
+  </ul>
+</nav>
+
+
+
+
+
+
 </body>
 </html>

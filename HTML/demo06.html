@@ -3,26 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CSS 常用属性</title>
-    <style>
-        .block{
-            background-color: blueviolet;
-            height:100px;
-        }
-        .span{
-            background-color: blue;
-            color: white;
-        }
-        .inline-block{
-            background-color: bisque;
-            width: 150px;
-            height:100px;
-        }
-        .display{
-            display:inline-block;
-            background-color: cadetblue;
-        }
-    </style>
+    <title>CSS 常用属性与属性值</title>
+    <link href="style5.css" rel="stylesheet">
 </head>
 <body>
     <h1 style="font:bold 50px 'KaiTi';">这是一个font混合属性示例</h1>
@@ -43,6 +25,119 @@
     <img src="./486.jpg" alt="" class="inline-block">
     <h2>display</h2>
     <div class="display">这是一个转换为行内块元素的div标签</div>
+
+    <div class="wrapper">
+  <div class="box px">我的宽度为 200px</div>
+  <div class="box vw">我的宽度为 10vw</div>
+  <div class="box em">我的宽度为 10em</div>
+  </div>
+
+<div class="box0"></div>
+
+
+<div class="wrapper01">
+  <div class="box01"></div>
+  <div class="box01">
+    These boxes both have a height set, this box has content in it which will
+    need more space than the assigned height, and so we get overflow.
+  </div>
+</div>
+
+<div class="box02">I have margin and padding set to 10% on all sides.</div>
+
+<div class="wrapper">
+  <div class="box03">
+    <img
+      alt="star"
+      class="width"
+      src="https://mdn.github.io/shared-assets/images/examples/big-star.png" />
+  </div>
+  <div class="box03">
+    <img
+      alt="star"
+      class="max"
+      src="https://mdn.github.io/shared-assets/images/examples/big-star.png" />
+  </div>
+  <div class="mini-box">
+    <img
+      alt="star"
+      class="max"
+      src="https://mdn.github.io/shared-assets/images/examples/big-star.png" />
+  </div>
+</div>
+
+
+
+  <ul class="ems">
+  <li>一</li>
+  <li>二</li>
+  <li>
+    三
+    <ul>
+      <li>三 A</li>
+      <li>
+        三 B
+        <ul>
+          <li>三 B 2</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+<ul class="rems">
+  <li>一</li>
+  <li>二</li>
+  <li>
+    三
+    <ul>
+      <li>三 A</li>
+      <li>
+        三 B
+ 
+        <ul>
+          <li>三 B 2</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+
+<p style="line-height: 2em" class="p1">
+  蝉鸣拉开盛夏序章，记忆里总藏着几帧特别的画面。若要将今夏浓缩成两个片段，该是山间溯溪的清凉，与老城茶肆的烟火。竹影婆娑的碎石小径上，还留着前夜骤雨打落的合欢花。
+</p>
+<p style="line-height: 4em" class="p1">
+  踩着溪石逆流而上，水花在膝间绽成碎玉。偶遇深潭便纵身跃入，惊起白鹭掠过崖壁青苔。暮色里寻到半山茶铺，粗陶碗中沉浮的野茶，混着柴火灶的焦香，竟比龙井更沁脾腑。藤编矮凳上的裂纹在月光下蜿蜒，竟与白日里溯溪的河道有几分相似。
+</p>
+
+<div class="box1 px1">我的宽度为 200px</div>
+<div class="box1 percent1">我的宽度为 40%</div>
+<div class="wrapper1">
+  <div class="box1 px1">我的宽度为 200px</div>
+  <div class="box1 percent1">我的宽度为 40%</div>
+</div>
+
+
+<div class="wrapper2">
+  <div class="box2">我是个具有 opacity 属性的盒子</div>
+</div>
+
+
+<div class="wrapper3">
+  <div class="box3 one">#02798b</div>
+  <div class="box3 two">#c55da1</div>
+  <div class="box3 three">#128a7d</div>
+</div>
+
+<div class="box4 image4"></div>
+<div class="box4 gradient4"></div>
+
+<div class="box5"></div>
+
+<div class="wrapper6">
+  <div class="box6">我的宽度是计算出来的。</div>
+</div>
 
 </body>
 </html>

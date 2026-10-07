@@ -1,0 +1,72 @@
+.main {
+  color: rebeccapurple;
+  border: 2px solid #ccc;
+  padding: 2em;
+}
+
+.special {
+  color: rgb(221, 29, 29);
+  font-weight: bold;
+  /* color:inherit; */
+}
+
+body {
+  color: green;
+}
+
+#u1{
+    color: #e41717;
+}
+
+.my-class-1 a {
+  color: inherit;
+}
+
+.my-class-2 a {
+  color: initial;
+}
+
+.my-class-3 a {
+  color: unset;
+}
+
+blockquote {
+  background-color: orange;
+  border: 2px solid blue;
+}
+
+.fix-this {
+  all: unset;
+}
+
+
+@layer firstLayer, secondLayer;
+
+p {
+  background-color: red;
+  color: rgb(15, 52, 215) !important;
+  border: 5px inset rgb(249, 6, 249);
+}
+p#addSpecificity {
+  border-style: solid !important;
+}
+
+@layer firstLayer {
+  #addSpecificity {
+    /* 1-0-0 */
+    background-color: blue;
+    color: white !important;
+    border-width: 5px;
+    border-style: dashed !important;
+  }
+}
+
+@layer secondLayer {
+  p#addSpecificity {
+    /* 1-0-1 */
+    background-color: green;
+    color: orange !important;
+    border-width: 10px;
+    border-style: dotted !important;
+  }
+}

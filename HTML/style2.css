@@ -1,0 +1,102 @@
+h2{
+    color: aqua;
+}
+.hightlight{
+    background-color: rgb(210, 207, 30);
+}
+#header{
+    font-size: 35px;
+}
+/*通用选择器*/
+*{
+    font-family: "KaiTi";
+    font-weight: bolder;
+}
+
+ul > li {
+  border-top: 5px solid red;
+}
+.father > .son{
+    color: aquamarine;
+} 
+.father p{
+     color:aqua;
+}
+/*显示优先级:ID>类>标签名*/
+.father .grandson{
+    color:blueviolet;
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+}
+.father .son2>.grandson{
+    color:bisque;
+    font-family: "Arial Rounded MT Bold";
+}
+.father>.son2>.grandson{
+    color:blue;
+    font-family: "SimSun";
+}
+/*还可以看出来通过子元素推到的优先级比后代选择器高*/
+
+h3+p{
+    background-color: red;
+    font-family:"Courier New";
+}
+
+h3~p{
+    background-color: aquamarine;
+}
+
+article p:first-child{
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    font-size: 120%;
+    font-weight: bold;
+}
+article p:last-child::first-line{
+    background-color: brown;
+}
+#element:hover{
+    background-color: blueviolet;
+    font-family: fantasy;
+}
+.note::after {
+    /* 它不会出现在 HTML 结构里，但在浏览器渲染时会“凭空出现”在元素的结尾 */
+    content: " ⚠️"; /* 一定要写 content，否则不会显示！ */
+    color: red;
+}
+.title::before {
+    content: "";
+    display: inline-block;
+    width: 50px;
+    height: 2px;
+    background: orange;
+    margin-left: 8px;
+    vertical-align: middle;
+}
+body {
+    font-family: sans-serif;
+}
+li[class] {
+  font-size: 120%;
+}
+li[class="a"] {
+  background-color: yellow;
+}
+li[class~="a"] {
+  color: red;
+}
+li[class|="a"]{
+    margin-left: 8px;
+}
+
+body {
+  font-family: sans-serif;
+}
+li[class^="a"] {
+  font-size: 150%;
+}
+li[class$="a"] {
+  background-color: yellow;
+}
+li[class*="a"] {
+  color: red;
+}

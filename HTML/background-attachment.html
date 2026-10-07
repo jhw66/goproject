@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>背景附加：scroll、fixed、local</title>
+  <link href="background-attachment.css" rel="stylesheet">
+</head>
+<body>
+  <main>
+    <h1>背景附加：scroll / fixed / local</h1>
+    <p>观察彩色条纹的位置，区分“滚动整个页面”和“滚动盒子内部内容”。</p>
+
+    <div class="instructions">
+      <strong>试试这两种操作</strong>
+      <ol>
+        <li>把鼠标放在彩色盒子里滚动，观察文字与背景是否一起移动。</li>
+        <li>把鼠标移到盒子外滚动页面，观察背景与盒子边框是否一起移动。</li>
+      </ol>
+      <p>也可以点击盒子后按方向键滚动。彩色条纹是背景图像，白色文字块是内容。</p>
+    </div>
+
+    <div class="examples">
+      <section class="card">
+        <h2>① scroll</h2>
+        <p class="description">背景相对于<strong>盒子本身</strong>固定。这也是默认值。</p>
+        <div class="demo scroll" tabindex="0" role="region" aria-label="scroll 内部滚动演示">
+          <div class="content">
+            <p>第 1 段：把鼠标放在这里，向下滚动。</p>
+            <p>第 2 段：文字向上移动。</p>
+            <p>第 3 段：观察右侧彩色条纹。</p>
+            <p>第 4 段：背景相对于盒子没有移动。</p>
+            <p>第 5 段：再把鼠标移到盒子外。</p>
+            <p>第 6 段：滚动整个页面。</p>
+            <p>第 7 段：盒子和背景一起离开原来的屏幕位置。</p>
+            <p>第 8 段：已经到达内容底部。</p>
+          </div>
+        </div>
+        <p class="observation"><code>background-attachment: scroll;</code><br>内部滚动：文字动，背景不动。</p>
+      </section>
+
+      <section class="card">
+        <h2>② fixed</h2>
+        <p class="description">背景相对于<strong>视口（浏览器可视区域）</strong>固定。</p>
+        <div class="demo fixed" tabindex="0" role="region" aria-label="fixed 内部滚动演示">
+          <div class="content">
+            <p>第 1 段：把鼠标放在这里，向下滚动。</p>
+            <p>第 2 段：文字向上移动。</p>
+            <p>第 3 段：背景保持原来的屏幕位置。</p>
+            <p>第 4 段：再把鼠标移到盒子外。</p>
+            <p>第 5 段：缓慢滚动整个页面。</p>
+            <p>第 6 段：盒子边框移动，背景条纹仍固定在视口上。</p>
+            <p>第 7 段：像移动一个窗口，看到后面的固定背景。</p>
+            <p>第 8 段：已经到达内容底部。</p>
+          </div>
+        </div>
+        <p class="observation"><code>background-attachment: fixed;</code><br>页面滚动：边框动，背景固定在视口上。</p>
+      </section>
+
+      <section class="card">
+        <h2>③ local</h2>
+        <p class="description">背景相对于<strong>盒子里的内容</strong>固定。</p>
+        <div class="demo local" tabindex="0" role="region" aria-label="local 内部滚动演示">
+          <div class="content">
+            <p>第 1 段：把鼠标放在这里，向下滚动。</p>
+            <p>第 2 段：文字向上移动。</p>
+            <p>第 3 段：彩色条纹也同时向上移动。</p>
+            <p>第 4 段：背景跟着内容一起滚动。</p>
+            <p>第 5 段：再把鼠标移到盒子外。</p>
+            <p>第 6 段：滚动整个页面。</p>
+            <p>第 7 段：盒子、内容和背景一起移动。</p>
+            <p>第 8 段：已经到达内容底部。</p>
+          </div>
+        </div>
+        <p class="observation"><code>background-attachment: local;</code><br>内部滚动：文字和背景一起动。</p>
+      </section>
+    </div>
+
+    <div class="comparison">
+      <table>
+        <caption>两种滚动操作的对照</caption>
+        <thead>
+          <tr><th scope="col">属性值</th><th scope="col">滚动整个页面</th><th scope="col">滚动盒子内部内容</th></tr>
+        </thead>
+        <tbody>
+          <tr><th scope="row"><code>scroll</code></th><td>背景随盒子移动</td><td>背景相对于盒子不动</td></tr>
+          <tr><th scope="row"><code>fixed</code></th><td>背景固定在视口上</td><td>背景固定在视口上</td></tr>
+          <tr><th scope="row"><code>local</code></th><td>背景随盒子移动</td><td>背景随内容移动</td></tr>
+        </tbody>
+      </table>
+      <p>注意：<code>fixed</code> 固定的是背景图像，盒子本身仍然会随页面滚动；背景只在盒子范围内可见。</p>
+      <p>参考：<a href="https://developer.mozilla.org/zh-CN/docs/Web/CSS/Reference/Properties/background-attachment">MDN：background-attachment</a></p>
+    </div>
+
+    <div class="page-space">
+      <p>这片区域用于让页面产生滚动条。把鼠标放在这里滚动，再向上回到三个盒子继续对比。</p>
+      <a href="#">返回顶部</a>
+    </div>
+  </main>
+</body>
+</html>
