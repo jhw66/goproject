@@ -1,0 +1,190 @@
+     header {
+            width: 100%;
+            height: 60px;
+            background-color: lightblue;
+            position: sticky;
+            top: 0px;       /* ✅ 粘在顶部 */
+            line-height: 60px;
+            text-align: center;
+            font-size: 24px;
+            font-weight: bold;
+        }
+        nav {
+           width: 100%;
+           text-align: center;
+           position: sticky;
+           bottom:0px;        /* ✅ 粘在底部 */
+           background: lightcoral;
+           padding: 10px;
+       }
+        .content {
+            height: 2000px;
+            font-size: 36px;
+            text-align: center;
+            margin-top: 20px;
+            font-family: Kaiti;
+            border: solid red;
+        }
+        .content p1{
+            display:inline-block;
+            position:sticky;
+            height:40px;
+            top:60px;
+            background-color: yellow;
+            border-bottom: 10px solid red;
+        }
+         .spacer {
+        height: 1000px; /* ✅ 制造间隔空间 */
+        background-color: turquoise;
+        border:solid yellow;
+    }
+        .content p2{
+            position:sticky;
+            display:inline-block;
+            height:40px;
+            top:100px;
+            background-color: orange;
+        } 
+
+
+ 
+  table {
+    border-collapse: collapse; /*合并边框，整齐 */
+    width: 100%;
+    font-family: "微软雅黑", sans-serif;
+    background-color: #f9f9f9;
+  }
+
+  td {
+    border: 2px solid #ccc;
+    padding: 12px; /* 行间距 */
+    text-align: left;
+  }
+ /*选择器	                 作用	                               举例
+:first-child	       选中第一个子元素	                      li:first-child → 列表第1项
+:last-child	           选中最后一个子元素	                    p:last-child
+:nth-child(n)	       选中第n个子元素	                      tr:nth-child(3)
+:nth-child(odd/even)	奇偶行选择	                            表格斑马纹
+:nth-of-type(n)	       选中同类型元素的第n个（只看标签类型）	p:nth-of-type(2)
+:not(selector)	       排除某个选择器	                  tr:not(:first-child) → 除了第一行之外的所有行 */
+  tr:nth-child(odd) {
+    background-color: #ffffff; /* 奇数行白色 */
+  }
+
+  tr:nth-child(even) {
+    background-color: #f2f2f2; /* 偶数行浅灰 */
+  }
+
+  tr:hover:nth-child(odd) {
+    background-color: #d0ebff; /* 鼠标悬停高亮蓝色 */
+    transition: 0.3s;
+  }
+  tr:hover:nth-child(even) {
+    background-color: #d9ffd0; /* 鼠标悬停高亮绿色 */
+    transition: 0.3s;
+  }
+  caption {
+    font-size: 20px;
+    font-weight: bold;
+    margin: 10px;
+  }
+
+
+
+  .father {
+    width: 100%;
+    height: 300px;
+    background-color: #f0f0f0;
+    border: 2px solid yellow;
+    position: relative;
+    margin-top: 30px;
+    margin-bottom: 20px;
+    overflow: hidden;/* 清除浮动方法一 */
+  }
+  /* 清除浮动方法二
+  .father::after {
+  content: "";
+  display: block;
+  clear: both;
+} */
+  .left-son {
+    float: left;
+    width: 10%;
+    height: 150px;
+    background-color: lightblue;
+    margin-right: 30px;
+  }
+  .right-son {
+    float: right;
+    width: 10%;
+    height: 100%;
+    background-color: lightcoral;
+  }
+
+
+
+    .box {
+        width: 100%;
+        height: 2000px;
+        background-color: #f0f0f0;
+        border: 2px solid green;
+    }
+    .box-normal {
+        width: 100px;
+        height: 100px;
+        background-color: rgb(118, 12, 12);
+    }
+    .box-relative {
+        width: 100px;
+        height: 100px;
+        background-color: lightgreen;
+        position: relative;
+        top: 20px;
+        left: 120px;
+    }
+    .box-absolute {
+        width: 100px;
+        height: 100px;
+        background-color: lightpink;
+        position: absolute;
+        right: 50px;
+    }
+    .box-fixed {
+        width: 100px;
+        height: 100px;
+        background-color: lightgray;
+        position: sticky;
+        bottom: 50px;
+        left: 20px;
+    }
+
+   
+
+.wrapper {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  grid-template-rows: 100px 100px;
+  grid-gap: 10px;
+  margin: 10px;
+  border: solid blue;
+}
+
+.wrapper div[class*="box"]{
+    border: solid red;
+    margin: 3px;
+}
+
+.box1 {
+  grid-column: 2 / 4;
+  grid-row: 1;
+}
+
+.box2 {
+  grid-column: 1;
+  grid-row: 1 / 3;
+}
+
+.box3 {
+  grid-row: 2;
+  grid-column: 3;
+}

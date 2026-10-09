@@ -88,6 +88,9 @@
   width: 10em;
 }
 
+.rem_vw{
+  width: calc(5rem + 5vw);
+}
 
 
 html {

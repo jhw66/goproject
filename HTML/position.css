@@ -1,0 +1,60 @@
+body {
+  width: 500px;
+  margin: 0 0;
+}
+.box{
+    height: 2000px;
+    width:100%;
+    margin: 10px;
+}
+.box:nth-child(odd){
+    border: solid red;
+}
+.box:nth-child(even){
+    border: solid blue;
+}
+p {
+  background-color: rgb(207, 232, 220);
+  border: 2px solid rgb(79, 185, 227);
+  padding: 10px;
+  margin: 10px;
+  border-radius: 5px;
+}
+
+/* h1{
+    position: relative;
+    top:30px;
+    left: 30px;
+} */
+
+/* .positioned {
+  position: relative;
+  background: rgba(255, 84, 104, 0.3);
+  border: 2px solid rgb(255, 84, 104);
+  top: 30px;
+  left: 30px;
+} */
+
+/* .positioned {
+  position: absolute;
+  background: rgba(255, 84, 104, 0.3);
+  border: 2px solid rgb(255, 84, 104);
+  top: 30px;
+  left: 30px;
+} */
+
+/* .positioned {
+  position: fixed;
+  background: rgba(255, 84, 104, 0.3);
+  border: 2px solid rgb(255, 84, 104);
+  top: 30px;
+  left: 30px;
+} */
+
+/* .positioned {
+  position: sticky;
+  background: rgba(255, 84, 104, 0.3);
+  border: 2px solid rgb(255, 84, 104);
+  top: 30px;
+  left: 30px;
+} */
