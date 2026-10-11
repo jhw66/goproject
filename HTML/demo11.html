@@ -33,7 +33,7 @@
         button_element[0].onclick=function(){
             alert("按钮被点击了，通过DOM属性绑定事件");
         }
-        button_element[1].addEventListener('click',function(){
+        button_element[1].addEventListener('click',()=>{
             alert("按钮被点击了，通过addEventListener绑定事件");
         });
 

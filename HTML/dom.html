@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DOM与事件</title>
+</head>
+<body>
+    <form id="task-form">
+        <label for="task-input">任务名称:</label>
+        <input id="task-input" name="task" type="text">
+        <button type="submit">添加</button>
+    </form>
+
+    <p id="message"></p>
+    <p id="total">共 0 项</p>
+    <ul id="task-list"></ul>
+
+    <script>
+        const form=document.querySelector("#task-form")
+        const input=document.querySelector("#task-input")
+        const message=document.querySelector("#meaage")
+        const total=document.querySelector("#total")
+        const list=document.querySelector("#task-list")
+
+        function updateTotal(){
+            total.textContent=`共${list.children.length}项`
+        }
+        form.addEventListener("submit",event=>{
+            event.preventDefault();
+            const taskName=input.value.trim();
+            if(taskName===""){
+                message.textContent="请输入任务名称";
+                input.focus();
+                return;
+            }
+            const item=document.createElement("li");
+            const text=document.createElement("span");
+            const deleteButton=document.createElement("button");
+
+            text.textContent=taskName;
+
+            deleteButton.type="button";
+            deleteButton.textContent="删除";
+            deleteButton.dataset.action="delete";
+
+            item.append(text," ",deleteButton);
+            list.append(item);
+
+            input.value="";
+            message.textContent="";
+            
+            updateTotal();
+            input.focus();
+        });
+        list.addEventListener("click",event=>{
+            if(!(event.target instanceof Element)) return;
+            const deleteButton=event.target.closest('button[data-action="delete"]');
+            if(deleteButton==null||!(list.contains(deleteButton))){
+                return;
+            }
+            const item=deleteButton.closest("li");
+            item.remove();
+            updateTotal()
+        })
+    </script>
+</body>
+</html>

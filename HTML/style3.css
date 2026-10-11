@@ -19,6 +19,7 @@
             /*边框样式有:solid dashed dotted double*/
             padding:20px;
             margin:20px;
+            width: 300px;
         }
         .border{
             display:inline-block;

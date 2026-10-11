@@ -3,15 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>JS 导入方式</title>
-    <script>
-        console.log("Hello,我是内联脚本head部分");
-    </script>
+    <title>JS基础语法</title>
+    <script type="module" src="./myscript.js"></script>
 </head>  
 <body>
     <button>hello world</button>
 
-    <!-- <script>
+    <script>
         console.log("Hello,我是内联脚本body部分");
         alert("欢迎来到JS世界！");
     </script>
@@ -21,15 +19,24 @@
     <script>
         var x;
         let y=5;
-        let empty_value;
         const z = 10;
-        console.log
-        (
+        const result = undefined??((""||"默认文本")&&"文本")
+        console.log(
             "x的值是:"+x+
             ",\ny的值是:"+y+
             ",\nz的值是:"+z+
-            ",\nempty_value的值是:"+empty_value
+            // ",\nm1的值是:"+m1+
+            ",\nm2的值是:"+m2+
+            ",\nresuly的值是:"+result
         );
+        let m1=2;
+        var m2=2;
+        const record = {
+            title: "校园卡",
+            status: "open"
+        };
+        record.status = "closed"; // 可以
+        // record = {}; // 不可以
 
         let time=12;
         if(time<10){
@@ -60,7 +67,6 @@
             alert("这是一个函数调用的示例！");
         }
         showMessage();
-    </script> -->
-    <script type="module" src="./myscript.js"></script>
+    </script>
 </body>
 </html>
