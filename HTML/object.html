@@ -1,0 +1,249 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JavaScript 对象、引用与 this</title>
+    <style>
+        body { max-width: 900px; margin: 32px auto; padding: 0 20px; font-family: sans-serif; line-height: 1.7; color: #243047; }
+        h1 { font-size: 26px; }
+        h2 { margin-top: 28px; font-size: 20px; }
+        pre { padding: 16px; border: 1px solid #dbe2ec; border-radius: 8px; background: #f5f7fb; white-space: pre-wrap; overflow-wrap: anywhere; }
+        code { background: #eef2f8; padding: 2px 5px; }
+    </style>
+</head>
+<body>
+    <h1>JavaScript 对象、引用与 this</h1>
+    <p>打开页面即可查看运行结果。按 F12 查看 Console，打开本文件的源码阅读对应示例和注释。</p>
+    <p>重点：对象赋值复制的是引用；普通函数的 <code>this</code> 取决于调用方式。</p>
+    <main id="results"></main>
+
+    <script>
+        "use strict";
+
+        let currentOutput;
+        function section(title){
+            const heading=document.createElement("h2");
+            heading.textContent=title;
+            currentOutput=document.createElement("pre");
+            document.querySelector("#results").append(heading,currentOutput);
+            console.log(`\n=== ${title} ===`);
+        }
+
+        function show(label,value){
+            const text = typeof value === "object" && value!=null ? JSON.stringify(value,null,2) : String(value);
+            currentOutput.textContent+=`${label}:${text}\n`;
+            console.log(`${label}:${text}`); 
+        }
+
+        // 每个代码块有独立作用域，可以重复使用 record、item 等变量名。
+        {
+            section("1. 创建对象与访问属性");
+            const record = {
+                id: "r001",
+                title: "校园卡",
+                place: "图书馆",
+                status: "open"
+            };
+            show("record", record);
+            show("record.title", record.title);             // 校园卡
+            show('record["title"]', record["title"]);       // 校园卡
+
+            const field = "place";
+            show("record[field]", record[field]);           // 图书馆：先读取变量 field
+            show("record.field", record.field);             // undefined：查找名为 field 的属性
+
+            // const 限制变量重新赋值，不限制对象属性修改。
+            record.status = "closed";
+            record.contact = "example";
+            show("修改 status 并增加 contact", record);
+            delete record.contact;                          // 删除属性，不是释放对象内存
+            show("删除 contact 后", record);
+            show('"contact" in record', "contact" in record); // false
+        }
+
+        {
+            section("2. 属性键：字符串、数值与 symbol");
+            const internalId = Symbol("id");
+            const labels = {
+                1: "第一条",
+                "item-title": "校园卡",
+                [internalId]: "内部编号 r001"
+            };
+            show("labels[1]", labels[1]);                    // 数值键会转成字符串
+            show('labels["1"]', labels["1"]);              // 与 labels[1] 相同
+            show('labels["item-title"]', labels["item-title"]); // 带连字符的键用方括号
+            show("labels[internalId]", labels[internalId]);
+            show("Object.keys(labels)", Object.keys(labels)); // 不包含 symbol 键
+            show("两个同描述的 Symbol 是否相等", Symbol("id") === Symbol("id")); // false
+        }
+
+        {
+            section("3. 方法与普通函数的 this");
+            const record = {
+                title: "校园卡",
+                place: "图书馆",
+                describe(prefix = "", suffix = "") {
+                    return `${prefix}${this.title}，地点：${this.place}${suffix}`;
+                }
+            };
+            show("record.describe()", record.describe());  // this 是 record
+
+            const other = { title: "雨伞", place: "食堂" };
+            other.describe = record.describe;
+            show("other.describe()", other.describe());    // 同一个函数，this 变成 other
+
+            const describe = record.describe;
+            try {
+                // 单独调用不保留接收者；严格模式下 this 是 undefined。
+                show("describe()", describe());
+            } catch (error) {
+                show("describe() 的预期错误", `${error.name}：this 是 undefined，无法读取 title`);
+            }
+
+            // call / apply：指定 this 并立即调用，区别在于参数的传法。
+            show("call：逐个传参", describe.call(record, "找到：", "！"));
+            show("apply：数组传参", describe.apply(other, ["寻找：", "？"]));
+
+            // bind：返回新函数，此时不会执行 describe。
+            const boundDescribe = describe.bind(record);
+            show("绑定后单独调用", boundDescribe());
+            show("call 无法改掉已绑定的 this", boundDescribe.call(other)); // 仍是校园卡
+        }
+
+        {
+            section("4. 箭头函数沿用外层的 this");
+            function createRecord() {
+                return {
+                    title: "对象自己的校园卡",
+                    normalDescribe() {
+                        return this.title;
+                    },
+                    // 对象字面量不会创建新的 this 作用域。
+                    // 此箭头函数捕获 createRecord 被调用时的 this。
+                    arrowDescribe: () => this.title
+                };
+            }
+            const outer = { title: "外层的水杯" };
+            const record = createRecord.call(outer);
+            show("普通方法 record.normalDescribe()", record.normalDescribe()); // 对象自己的校园卡
+            show("普通方法 record.normalDescribe.call()",record.normalDescribe.call(outer))
+            show("箭头函数 record.arrowDescribe()", record.arrowDescribe());   // 外层的水杯
+            show("call 也不会改变箭头函数的 this", record.arrowDescribe.call(record));
+            // 需要通过 this 访问当前对象时，优先使用上面的普通方法语法。
+        }
+
+        {
+            section("5. 对象赋值：两个变量共享同一个对象");
+            const a = { title: "校园卡" };
+            const b = a;                                   // 复制引用，没有复制整个对象
+            show("a === b", a === b);                      // true
+            b.title = "雨伞";
+            show("修改 b.title 后的 a.title", a.title);    // 雨伞
+            show("修改 b.title 后的 b.title", b.title);    // 雨伞
+            show("两个内容相同的新对象是否相等", { title: "雨伞" } === { title: "雨伞" }); // false
+            // const b 仍然可以改属性，只是不能让 b 重新指向另一个对象。
+        }
+
+        {
+            section("6. 函数传参：修改属性与重新赋值");
+            function update(record) {
+                record.title = "雨伞";                     // 通过共享引用修改原对象
+                show("函数内修改属性后", record);
+
+                record = { title: "水杯" };                // 只改变局部参数的绑定
+                show("函数内重新赋值后", record);
+            }
+            const item = { title: "校园卡" };
+            show("调用前 item", item);
+            update(item);
+            show("调用后 item.title", item.title);         // 雨伞，不是水杯
+            // 参数按值传递；这里被复制的值是对象引用。
+            // 如果希望调用者使用新对象，可以 return 新对象，再由调用者赋值。
+        }
+
+        {
+            section("7. class、构造函数与原型链");
+            class Record {
+                constructor(title, place) {
+                    this.title = title;
+                    this.place = place;
+                }
+                describe() {
+                    return `${this.title}：${this.place}`;
+                }
+            }
+            const item = new Record("校园卡", "图书馆");
+            const other = new Record("雨伞", "食堂");
+            show("item.describe()", item.describe());
+            show("title 是实例自身的属性", Object.hasOwn(item, "title"));   // true
+            show("describe 是实例自身的属性", Object.hasOwn(item, "describe")); // false
+            show("describe 在 Record.prototype 上", Object.hasOwn(Record.prototype, "describe")); // true
+            show("item 的原型是 Record.prototype", Object.getPrototypeOf(item) === Record.prototype); // true
+            show("两个实例共享原型上的方法", item.describe === other.describe); // true
+            // 读取 item.describe：先查 item 自身，再查 Record.prototype。
+
+            const parent = { category: "失物" };
+            const child = Object.create(parent);
+            child.title = "校园卡";
+            show("沿原型读取 child.category", child.category); // 失物
+            child.category = "寻物";                       // 创建同名自身属性，遮蔽原型属性
+            show("自身属性优先", child.category);          // 寻物
+            delete child.category;
+            show("删除自身属性后再次查原型", child.category); // 失物
+        }
+
+        {
+            section("8. extends、super、static、私有字段与访问器");
+            class Record {
+                #status = "open";                          // 每个实例的私有字段
+                constructor(title, place) {
+                    this.title = title;
+                    this.place = place;
+                }
+                get status() {                             // 像属性一样读取，不加括号
+                    return this.#status;
+                }
+                set status(value) {                        // 属性赋值触发 setter
+                    if (value !== "open" && value !== "closed") {
+                        throw new Error("status 只能是 open 或 closed");
+                    }
+                    this.#status = value;
+                }
+                describe() {
+                    return `${this.title}：${this.place}`;
+                }
+                static isRecord(value) {                   // 通过类名调用
+                    return value instanceof Record;
+                }
+            }
+            class LostRecord extends Record {
+                constructor(title, place, contact) {
+                    super(title, place);                   // 派生构造函数使用 this 前先调用 super
+                    this.contact = contact;
+                }
+                describe() {
+                    return `${super.describe()}，联系：${this.contact}`;
+                }
+            }
+            const item = new LostRecord("校园卡", "图书馆", "example");
+            show("子类 describe()", item.describe());
+            show("getter：item.status", item.status);      // open
+            item.status = "closed";                        // 调用 setter
+            show("setter 修改后的 item.status", item.status); // closed
+            show("Record.isRecord(item)", Record.isRecord(item)); // true
+            show("item instanceof LostRecord", item instanceof LostRecord); // true
+            show("item instanceof Record", item instanceof Record); // true
+            show("item instanceof Object", item instanceof Object); // true
+            show("item.isRecord", item.isRecord);          // undefined：静态方法在类上
+            // item.#status 会导致语法错误，不能在类外直接访问私有字段。
+            try {
+                item.status = "unknown";
+            } catch (error) {
+                show("setter 拒绝非法状态", error.message);
+            }
+            show("拒绝非法赋值后状态仍为", item.status);    // closed
+        }
+    </script>
+</body>
+</html>

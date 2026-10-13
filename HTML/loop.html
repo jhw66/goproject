@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Loop</title>
+</head>
+<body>
+    <script>
+        var count=-1;
+        if(count===0){
+            console.log("没有记录");
+        }else if(count<10){
+            console.log("记录较少");
+        }
+
+        let type="寻物";
+        switch(type){
+            case "lost":
+                console.log("lost");
+                break;
+            default:
+                console.log("寻物");
+        }
+
+        const record = {
+            title: "校园卡",
+            place: "图书馆"
+        };
+        for (const key in record) {
+            console.log(key, record[key]);
+        }
+
+        const titles = ["校园卡", "雨伞"];
+        for (const title of titles) {
+            console.log(title);
+        }
+    </script>
+</body>
+</html>

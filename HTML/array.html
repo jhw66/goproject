@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JavaScript 数组、常用方法与集合</title>
+    <style>
+        body { max-width: 1000px; margin: 32px auto; padding: 0 20px; font-family: sans-serif; line-height: 1.7; color: #243047; }
+        h1 { font-size: 26px; }
+        h2 { margin-top: 28px; font-size: 20px; }
+        pre { padding: 16px; border: 1px solid #dbe2ec; border-radius: 8px; background: #f5f7fb; white-space: pre-wrap; overflow-wrap: anywhere; }
+        code { background: #eef2f8; padding: 2px 5px; }
+        .table-wrapper { overflow-x: auto; }
+        table { width: 100%; border-collapse: collapse; font-size: 14px; }
+        caption { text-align: left; margin-bottom: 8px; }
+        th, td { border: 1px solid #dbe2ec; padding: 8px 12px; text-align: left; }
+        th { background: #eef2f8; }
+        td { overflow-wrap: anywhere; }
+    </style>
+</head>
+<body>
+    <h1>JavaScript 数组、常用方法与集合</h1>
+    <p>打开页面即可查看运行结果。按 F12 查看 Console，打开本文件源码阅读对应示例和中文注释。刷新页面可以重新运行。</p>
+    <p>重点：先看方法是否直接修改原数组，再看返回值。<code>map</code> 转换，<code>filter</code> 筛选，<code>find</code> 查找第一条，<code>reduce</code> 累积。</p>
+    <p>“不直接修改原数组”描述的是方法本身；回调仍然可以修改数组或其中的对象。创建新数组也不代表深复制对象。</p>
+    <noscript>请启用 JavaScript 后查看运行结果。</noscript>
+    <main id="results"></main>
+
+    <script>
+        "use strict";
+
+        // 显示工具：核心数组示例从“1. 创建、读取与动态增长”开始。
+        let currentOutput;
+        function section(title) {
+            const heading = document.createElement("h2");
+            heading.textContent = title;
+            currentOutput = document.createElement("pre");
+            document.querySelector("#results").append(heading, currentOutput);
+            console.log("\n=== " + title + " ===");
+        }
+
+        function format(value) {
+            if (typeof value === "string") return JSON.stringify(value);
+            if (value !== null && typeof value === "object") return JSON.stringify(value, null, 2);
+            return String(value); // 保留 undefined，不让它在输出中消失。
+        }
+
+        function show(label, value) {
+            // 立即转成文本，避免控制台稍后展开对象时看到后续修改的状态。
+            const text = label + "： " + format(value);
+            currentOutput.textContent += text + "\n";
+            console.log(text);
+        }
+
+        function createRecords() {
+            // 每次调用都创建新的数组和对象，避免不同示例互相影响。
+            return [
+                { id: "a", title: "校园卡", status: "open" },
+                { id: "b", title: "雨伞", status: "closed" },
+                { id: "c", title: "水杯", status: "open" }
+            ];
+        }
+
+        // 每个代码块有独立作用域，可以重复使用 titles、records 等变量名。
+        {
+            section("1. 创建、读取与动态增长");
+            const titles = ["校园卡", "雨伞", "水杯"];
+            show("titles", titles);
+            show("titles[0]", titles[0]);             // 校园卡
+            show("titles.length", titles.length);     // 3
+            show("titles.at(-1)", titles.at(-1));     // 水杯
+            show("titles[100]", titles[100]);         // undefined，不会抛出越界异常
+            show("读取越界后长度仍然为", titles.length);
+            titles.push("钥匙");
+            show("push 后动态增长", titles);
+            show("允许混合类型的数组", [1, "校园卡", true]);
+            show("业务中保持元素结构一致", createRecords());
+            // const 限制重新赋值，不限制数组内容的修改。
+        }
+
+        {
+            section("2. 大下标赋值：空位不等于填入 undefined");
+            const titles = ["校园卡", "雨伞", "水杯"];
+            titles[6] = "钥匙";                       // 下标 3、4、5 是空位
+            show("titles.length", titles.length);     // 7，不是实际存在元素的个数
+            show("实际存在的下标 Object.keys(titles)", Object.keys(titles));
+            show("titles[3]", titles[3]);             // undefined
+            show("3 in titles", 3 in titles);         // false：下标 3 不存在
+            titles[4] = undefined;
+            show("titles[4]", titles[4]);             // undefined
+            show("4 in titles", 4 in titles);         // true：下标存在，值是 undefined
+            const visited = [];
+            titles.forEach((value, index) => visited.push(index));
+            show("forEach 实际访问的下标", visited);  // [0, 1, 2, 4, 6]
+            // 不用 JSON.stringify 展示稀疏数组本身：
+            // 它会把数组空位和 undefined 都输出成 null，掩盖两者的区别。
+        }
+
+        {
+            section("3. 常用方法对照：调用前、返回值、调用后");
+            show("每一行独立使用同样的初始数组", [3, 20, 100]);
+            // “否”表示方法本身不直接修改数组；本表回调也没有额外修改数据。
+            const cases = [
+                { code: "push(7)", mutates: true, run: array => array.push(7) },
+                { code: "pop()", mutates: true, run: array => array.pop() },
+                { code: "unshift(7)", mutates: true, run: array => array.unshift(7) },
+                { code: "shift()", mutates: true, run: array => array.shift() },
+                { code: "splice(1, 1, 7)", mutates: true, run: array => array.splice(1, 0, 7) },
+                { code: "sort((a, b) => a - b)", mutates: true, run: array => array.sort((a, b) => a - b) },
+                { code: "reverse()", mutates: true, run: array => array.reverse() },
+                { code: "slice(0, 2)", mutates: false, run: array => array.slice(0, 2) },
+                { code: "concat([7])", mutates: false, run: array => array.concat([7]) },
+                { code: "map(value => value * 2)", mutates: false, run: array => array.map(value => value * 2) },
+                { code: "filter(value => value > 10)", mutates: false, run: array => array.filter(value => value > 10) },
+                { code: "find(value => value > 10)", mutates: false, run: array => array.find(value => value > 10) },
+                { code: "findIndex(value => value > 10)", mutates: false, run: array => array.findIndex(value => value > 10) },
+                { code: "some(value => value > 10)", mutates: false, run: array => array.some(value => value > 10) },
+                { code: "every(value => value > 10)", mutates: false, run: array => array.every(value => value > 10) },
+                { code: "reduce((sum, value) => sum + value, 0)", mutates: false, run: array => array.reduce((sum, value) => sum + value, 0) },
+                { code: "forEach(value => value * 2)", mutates: false, run: array => array.forEach(value => value * 2) }
+            ];
+            const wrapper = document.createElement("div");
+            wrapper.className = "table-wrapper";
+            const table = document.createElement("table");
+            const caption = table.createCaption();
+            caption.textContent = "下面的返回值和数组内容均由实际调用生成。“修改”是方法的行为，不保证每组输入都会发生内容变化。";
+            const header = table.createTHead().insertRow();
+            for (const label of ["调用", "直接修改原数组", "调用前", "返回值", "调用后", "返回值 === 原数组"]) {
+                const cell = document.createElement("th");
+                cell.scope = "col";
+                cell.textContent = label;
+                header.append(cell);
+            }
+            const body = table.createTBody();
+            for (const example of cases) {
+                const array = [3, 20, 100];           // 每个方法使用新数组
+                const before = JSON.stringify(array);
+                const result = example.run(array);
+                const row = body.insertRow();
+                const values = [
+                    example.code, example.mutates ? "是" : "否", before,
+                    format(result), JSON.stringify(array), String(result === array)
+                ];
+                for (const value of values) row.insertCell().textContent = value;
+                console.log(example.code + " | 之前：" + before + " | 返回：" + format(result) + " | 之后：" + JSON.stringify(array));
+            }
+            wrapper.append(table);
+            document.querySelector("#results").append(wrapper);
+            // splice(start, deleteCount, ...items)：从 start 开始删除 deleteCount 个，再插入 items；返回被删除的元素数组。
+            // slice(start, end)：截取 start 到 end 之前的元素，end 不包含在内。
+        }
+
+        {
+            section("4. map：将每个元素转换为另一个值");
+            const records = createRecords();
+            show("调用前 records", records);
+            const titles = records.map((record, index, array) => {
+                // 数组回调参数：当前元素、当前下标、正在遍历的数组。
+                show("map 当前 index", index);
+                show("map 当前 record.title", record.title);
+                show("array === records", array === records);
+                return record.title;                 // 本轮返回值成为新数组的一个元素
+            });
+            show("map 返回的新数组 titles", titles); // ["校园卡", "雨伞", "水杯"]
+            show("titles === records", titles === records); // false
+            show("调用后 records", records);
+            // 箭头函数使用 {} 函数体时，需要显式 return。
+            const missingReturn = records.map(record => { record.title; });
+            show("忘记 return，每个位置都是 undefined", missingReturn.map(value => String(value)));
+            // 这里转成字符串显示，否则 JSON.stringify 会把 undefined 数组元素显示成 null。
+        }
+
+        {
+            section("5. filter：保留满足条件的元素");
+            const records = createRecords();
+            const openRecords = records.filter(record => record.status === "open");
+            show("筛选前 records", records);
+            show("openRecords", openRecords);         // 校园卡、水杯
+            show("openRecords === records", openRecords === records); // false
+            show("筛选后 records", records);
+            show("无匹配时返回空数组", records.filter(record => record.status === "unknown"));
+            show("真值筛选 filter(Boolean)", [0, 1, "", "校园卡", false, null].filter(Boolean));
+            // filter 保留原元素，不会将元素转换成回调返回的 true / false。
+        }
+
+        {
+            section("6. find / findIndex：第一条匹配与未找到");
+            const records = createRecords();
+            const record = records.find(record => record.id === "b");
+            show("查找 id=b", record);
+            show("第一条 open 记录", records.find(record => record.status === "open"));
+            show("findIndex 查找 id=b", records.findIndex(record => record.id === "b")); // 1
+            const missing = records.find(record => record.id === "不存在");
+            show("find 未找到", missing);            // undefined
+            show("findIndex 未找到", records.findIndex(record => record.id === "不存在")); // -1
+            if (missing === undefined) {
+                show("使用属性前先判断", "未找到记录，跳过读取 title");
+            } else {
+                show("找到的标题", missing.title);
+            }
+            show("可选链配合空值合并", missing?.title ?? "未找到记录");
+            show("查找后 records", records);
+            // find 返回原数组里的元素；如果元素是对象，拿到的仍然是该对象的引用。
+        }
+
+        {
+            section("7. reduce：逐轮累积 open 记录数量");
+            const records = createRecords();
+            const openCount = records.reduce((count, record, index) => {
+                // count：上一轮返回的累积值；第一轮是下面传入的初始值 0。
+                // record：当前元素；index：当前下标。
+                const nextCount = count + (record.status === "open" ? 1 : 0);
+                show("第 " + (index + 1) + " 轮", {
+                    count, title: record.title, status: record.status,
+                    "本轮返回的下一次 count": nextCount
+                });
+                return nextCount;                    // 必须返回，下一轮才拿得到累积值
+            }, 0);
+            show("最终 openCount", openCount);       // 2
+            show("reduce 后 records", records);
+            show("空数组 + 初始值 0", [].reduce((sum, value) => sum + value, 0)); // 0
+            try {
+                [].reduce((sum, value) => sum + value);
+            } catch (error) {
+                show("空数组省略初始值的预期错误", error.name); // TypeError
+            }
+            // 初始值不限于数字；下面用对象统计不同状态的数量。
+            const counts = records.reduce((result, record) => {
+                result[record.status] = (result[record.status] ?? 0) + 1;
+                return result;                       // 修改的是累积对象，不是 records
+            }, {});
+            show("按 status 统计", counts);          // { open: 2, closed: 1 }
+        }
+
+        {
+            section("8. forEach、for...of、some、every");
+            const records = createRecords();
+            const result = records.forEach(record => {
+                show("forEach 执行输出操作", record.title);
+                return record.title;                 // forEach 忽略这个返回值
+            });
+            show("forEach 的返回值", result);        // undefined
+            const visited = [];
+            records.forEach(record => {
+                if (record.id === "b") return;        // 只结束本次回调，不会退出整个遍历
+                visited.push(record.id);
+            });
+            show("return 后仍访问后续元素", visited); // ["a", "c"]
+            for (const record of records) {
+                show("for...of 当前记录", record.id);
+                if (record.id === "b") break;         // 可以退出整个循环
+            }
+            show("some：至少一条 open", records.some(record => record.status === "open")); // true
+            show("every：全部 open", records.every(record => record.status === "open")); // false
+            show("空数组 some", [].some(() => true));   // false
+            show("空数组 every", [].every(() => false)); // true：没有元素违反条件
+        }
+
+        {
+            section("9. sort 与 reverse：返回原数组，改变原来的顺序");
+            const numbers = [3, 20, 100];
+            show("默认排序前", numbers);
+            const defaultSorted = numbers.sort();
+            show("默认按字符串规则排序", defaultSorted); // [100, 20, 3]
+            show("defaultSorted === numbers", defaultSorted === numbers); // true
+            numbers.sort((a, b) => a - b);
+            show("数值升序 a - b", numbers);         // [3, 20, 100]
+            numbers.sort((a, b) => b - a);
+            show("数值降序 b - a", numbers);         // [100, 20, 3]
+            // 比较函数返回负数：a 在 b 前面；正数：a 在 b 后面；0：比较条件下相等。
+            const original = [3, 100, 20];
+            const sorted = [...original].sort((a, b) => a - b);
+            show("复制后排序 sorted", sorted);       // [3, 20, 100]
+            show("original 保持原顺序", original);  // [3, 100, 20]
+            const reversed = original.reverse();
+            show("reverse 后的 original", original);
+            show("reversed === original", reversed === original); // true
+
+            const records = createRecords();
+            function compareRecords(a, b) {
+                // open 排在 closed 前；同状态返回 0。
+                return Number(a.status === "closed") - Number(b.status === "closed");
+            }
+            show("复制后按状态排序", [...records].sort(compareRecords));
+            show("records 仍保持原顺序", records);
+        }
+
+        {
+            section("10. 新数组与共享对象：浅复制的边界");
+            const records = createRecords();
+            const selected = records.filter(record => record.status === "open");
+            show("selected === records", selected === records); // false：数组不同
+            show("selected[0] === records[0]", selected[0] === records[0]); // true：对象相同
+            selected.pop();
+            show("只删除 selected 的元素，records.length 仍为", records.length); // 3
+            selected[0].title = "修改后的标题";
+            show("修改对象后 records[0].title", records[0].title); // 同样改变
+
+            const sliced = records.slice();
+            const spread = [...records];
+            const mapped = records.map(record => record);
+            show("slice 仍共享元素对象", sliced[0] === records[0]); // true
+            show("展开复制仍共享元素对象", spread[0] === records[0]); // true
+            show("map 返回原对象时仍共享对象", mapped[0] === records[0]); // true
+
+            // 给每条记录创建新对象。本例的属性都是字符串，足够隔离这些字段的修改。
+            const copied = records.map(record => ({ ...record }));
+            copied[0].title = "仅修改 copied";
+            show("copied[0].title", copied[0].title);
+            show("records[0].title", records[0].title);
+            // {...record} 仍是浅复制；若有嵌套对象，还需分别处理嵌套层。
+            const nested = [{ detail: { place: "图书馆" } }];
+            const shallowCopy = nested.map(record => ({ ...record }));
+            shallowCopy[0].detail.place = "食堂";
+            show("嵌套 detail 仍被共享", nested[0].detail.place); // 食堂
+
+            // 方法本身不修改数组，但我们可以在回调中主动修改对象属性。
+            const callbackRecords = createRecords();
+            callbackRecords.forEach(record => { record.status = "closed"; });
+            show("forEach 回调修改后的原记录", callbackRecords);
+        }
+
+        {
+            section("11. Map：使用键映射到值");
+            const byId = new Map();
+            byId.set("a", { title: "校园卡" });
+            byId.set("b", { title: "雨伞" });
+            show('byId.get("a")', byId.get("a"));
+            show('byId.has("a")', byId.has("a"));       // true
+            show("byId.size", byId.size);             // 2
+            byId.set("a", { title: "更新后的校园卡" });
+            show("同一个键会覆盖值，不增加 size", byId.size);
+            show("Map 转成条目数组展示", [...byId]);  // 直接 JSON.stringify(Map) 会得到 {}
+            show('byId.delete("a")', byId.delete("a")); // true
+            show('删除后 byId.has("a")', byId.has("a")); // false
+            show("删除后 size", byId.size);           // 1
+            show("获取不存在的键", byId.get("不存在")); // undefined
+
+            const objectKey = { id: "c" };
+            byId.set(objectKey, "水杯");              // 对象也可以作为键
+            show("同一个对象引用可以取到值", byId.get(objectKey));
+            show("内容相同的新对象不能取到值", byId.get({ id: "c" })); // undefined
+            show("数组 map 和集合 Map 是不同的概念", "records.map(fn) 是数组方法；new Map() 创建键值集合");
+        }
+
+        {
+            section("12. Set：去重与对象引用");
+            const categories = new Set(["证件", "生活用品", "证件"]);
+            show("转成数组展示唯一值", [...categories]); // ["证件", "生活用品"]
+            show("categories.size", categories.size);   // 2
+            categories.add("数码产品");
+            categories.add("证件");                  // 重复加入不会新增元素
+            show("add 后", [...categories]);
+            show('categories.has("证件")', categories.has("证件")); // true
+            show('categories.delete("生活用品")', categories.delete("生活用品")); // true
+            show("delete 后", [...categories]);
+
+            const first = { title: "校园卡" };
+            const second = { title: "校园卡" };
+            const objects = new Set([first, second, first]);
+            show("两个内容相同的新对象 first === second", first === second); // false
+            show("objects.size", objects.size);      // 2：同一引用 first 重复时才去重
+            show("objects 转成数组", [...objects]);
+            const records = createRecords();
+            show("业务中按字段去重：唯一 status", [...new Set(records.map(record => record.status))]);
+        }
+    </script>
+</body>
+</html>

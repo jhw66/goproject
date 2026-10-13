@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>String</title>
+</head>
+<body>
+    <script>
+        const text="    图书馆 校园卡 ";
+        console.log(text);
+        console.log(text.trim());
+        console.log(text.includes('校园卡'));
+        console.log(text.indexOf("体育馆"));
+        console.log("abcdefg".slice(1,4));
+        console.log("abcdefg".slice(-2));
+        console.log("abcdefg".toUpperCase());
+        const pattern=/^\d{4}-\d{2}-\d{2}$/;
+        console.log(pattern.test("2026-10-07"));
+        console.log(pattern.test("2026/10/07"));
+    </script>
+</body>
+</html>
